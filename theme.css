@@ -1123,15 +1123,171 @@ body:has(.backgroundContainer.withBackdrop) .backdropImage {
    13. ZOEKEN & FILTERS
    ============================================================================= */
 
-.searchFields .inputContainer,
-.searchFieldsInner {
-    max-width: 50em;
+/* ---- Zoekbalk in de navbar ----
+   Met alleen CSS kan er geen echt invoerveld in de navbar; de zoek-knop wordt
+   daarom vormgegeven als zoekbalk en opent bij klikken de zoekpagina. */
+.MuiAppBar-root .MuiToolbar-root > .MuiBox-root {
+    display: flex;
+    align-items: center;
 }
 
-.searchfields-txtSearch {
-    padding: .8em 1.2em .8em 2.6em !important;
-    font-size: 1.05em !important;
-    border-radius: 16px !important;
+.MuiAppBar-root a[aria-label="Search"] {
+    align-self: center;
+    width: var(--am-navsearch-width, 240px) !important;
+    height: 38px !important;
+    justify-content: flex-start !important;
+    gap: 10px;
+    padding: 0 14px !important;
+    margin: 0 8px !important;
+    border-radius: 12px !important;
+    background: rgb(255 255 255 / 0.06) !important;
+    box-shadow: inset 0 0 0 1px var(--am-border-hi);
+    color: var(--am-text-faint) !important;
+    transition: background var(--am-fast), box-shadow var(--am-fast), color var(--am-fast) !important;
+}
+
+.MuiAppBar-root a[aria-label="Search"] svg {
+    font-size: 20px !important;
+    flex-shrink: 0;
+}
+
+.MuiAppBar-root a[aria-label="Search"]::after {
+    content: var(--am-search-label, "Search…");
+    font-family: var(--am-font);
+    font-size: .9rem;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.MuiAppBar-root a[aria-label="Search"]:hover {
+    background: rgb(var(--am-accent-rgb) / 0.12) !important;
+    box-shadow: inset 0 0 0 1px rgb(var(--am-accent-rgb) / 0.45);
+    color: var(--am-text) !important;
+}
+
+/* Op de zoekpagina zelf is de knop disabled: als actief tonen */
+.MuiAppBar-root a[aria-label="Search"].Mui-disabled {
+    opacity: 1 !important;
+    color: #fff !important;
+    background: linear-gradient(120deg, rgb(var(--am-accent-3-rgb) / 0.32), rgb(var(--am-accent-2-rgb) / 0.22)) !important;
+    box-shadow: inset 0 0 0 1px rgb(var(--am-accent-rgb) / 0.45);
+}
+
+/* ---- Zoekpagina ---- */
+#searchPage .searchFields {
+    padding-top: 3.5em !important;
+    padding-bottom: 1.5em !important;
+}
+
+#searchPage .searchFieldsInner {
+    position: relative;
+    max-width: 46em;
+    margin: 0 auto;
+}
+
+/* Vergrootglas in het veld */
+#searchPage .searchfields-icon {
+    position: absolute;
+    left: 22px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1;
+    font-size: 26px !important;
+    color: var(--am-accent) !important;
+    pointer-events: none;
+    margin: 0 !important;
+}
+
+#searchPage .inputContainer {
+    margin: 0 !important;
+}
+
+#searchPage .inputLabel {
+    display: none !important;
+}
+
+#searchPage .searchfields-txtSearch {
+    height: 64px !important;
+    padding: 0 24px 0 62px !important;
+    font-size: 1.25em !important;
+    font-weight: 500 !important;
+    border-radius: 20px !important;
+    background: var(--am-glass) !important;
+    backdrop-filter: blur(20px) saturate(1.5);
+    -webkit-backdrop-filter: blur(20px) saturate(1.5);
+    border: 1px solid var(--am-border-hi) !important;
+    box-shadow: 0 12px 40px rgb(0 0 0 / 0.35), inset 0 1px 0 rgb(255 255 255 / 0.06) !important;
+}
+
+#searchPage .searchfields-txtSearch::placeholder {
+    color: var(--am-text-faint);
+    opacity: 1;
+}
+
+#searchPage .searchfields-txtSearch:focus {
+    border-color: rgb(var(--am-accent-rgb) / 0.8) !important;
+    box-shadow:
+        0 0 0 5px rgb(var(--am-accent-rgb) / 0.16),
+        0 14px 50px rgb(var(--am-accent-rgb) / 0.22),
+        inset 0 1px 0 rgb(255 255 255 / 0.08) !important;
+}
+
+/* Suggesties als chips */
+#searchPage .searchSuggestions .sectionTitle {
+    font-size: .78em !important;
+    font-weight: 600 !important;
+    text-transform: uppercase;
+    letter-spacing: .12em;
+    color: var(--am-text-faint) !important;
+    margin-bottom: 1em !important;
+}
+
+#searchPage .searchSuggestionsList {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    max-width: 56em;
+    margin: 0 auto;
+}
+
+#searchPage .searchSuggestionsList > div {
+    display: contents;
+}
+
+#searchPage .searchSuggestionsList a.button-link {
+    display: inline-flex !important;
+    align-items: center;
+    padding: .55em 1.1em !important;
+    margin: 0 !important;
+    border-radius: 999px !important;
+    background: var(--am-glass) !important;
+    border: 1px solid var(--am-border-hi);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    color: var(--am-text) !important;
+    font-weight: 500 !important;
+    font-size: .95em;
+    transition: background var(--am-fast), border-color var(--am-fast), transform var(--am-fast), color var(--am-fast) !important;
+}
+
+#searchPage .searchSuggestionsList a.button-link:hover {
+    background: rgb(var(--am-accent-rgb) / 0.2) !important;
+    border-color: rgb(var(--am-accent-rgb) / 0.55);
+    color: #fff !important;
+    transform: translateY(-2px);
+    filter: none;
+}
+
+/* Resultaten: secties iets meer lucht */
+#searchPage .searchResults .verticalSection {
+    margin-bottom: 1.2em;
+}
+
+#searchPage .noItemsMessage {
+    text-align: center;
+    padding: 3em 1em;
+    font-size: 1.1em;
 }
 
 .alphaPickerButton {
@@ -1340,6 +1496,33 @@ body:has(.backgroundContainer.withBackdrop) .backdropImage {
     .sectionTitle,
     .sectionTitle-cards {
         font-size: 1.15em !important;
+    }
+
+    /* Navbar-zoekbalk wordt weer een icoon */
+    .MuiAppBar-root a[aria-label="Search"] {
+        width: 44px !important;
+        height: 44px !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        justify-content: center !important;
+        background: transparent !important;
+        box-shadow: none;
+    }
+    .MuiAppBar-root a[aria-label="Search"]::after {
+        content: none;
+    }
+
+    #searchPage .searchFields {
+        padding-top: 1.5em !important;
+    }
+    #searchPage .searchfields-txtSearch {
+        height: 54px !important;
+        font-size: 1.05em !important;
+        padding-left: 54px !important;
+    }
+    #searchPage .searchfields-icon {
+        left: 18px;
+        font-size: 22px !important;
     }
 
     #loginPage .padded-left.padded-right.padded-bottom-page {
