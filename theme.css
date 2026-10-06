@@ -1,0 +1,435 @@
+/*
+================================================================================
+  AMETHYST - a dark, glassy, violet theme for Jellyfin 12.x
+  Hoofdbestand. Importeer dit in Dashboard > General > Custom CSS Code.
+================================================================================
+*/
+
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
+@import url("https://cdn.jsdelivr.net/gh/JulienLoon/Amethyst-Theme@main/colors/violet.css");
+
+:root {
+    --theme-name: 'Amethyst-Theme';
+    --v-radius:    16px;
+    --v-radius-sm: 10px;
+    --v-blur:      22px;
+    --v-ease:      .2s ease;
+}
+
+/* ~~~~~~~~~~~~~~~~~~~~ FONT ~~~~~~~~~~~~~~~~~~~~ */
+body, button, input, select, textarea,
+h1, h2, h3, h4, h5, h6, p,
+.MuiTypography-root, .MuiButton-root, .MuiInputBase-root {
+    font-family: 'Inter', system-ui, sans-serif !important;
+}
+
+/* ~~~~~~~~~~~~~~~~~~~~ ACHTERGROND ~~~~~~~~~~~~~~~~~~~~ */
+html {
+    background: var(--v-bg) !important;
+    color: var(--v-text);
+}
+
+body {
+    background: var(--v-bg-gradient) fixed !important;
+    color: var(--v-text) !important;
+}
+
+/* Laat de gradient door alle lagen heen schijnen */
+.skinBody,
+.mainAnimatedPages,
+.page,
+.libraryPage,
+.backgroundContainer,
+.backgroundContainer.withBackdrop {
+    background: transparent !important;
+}
+
+/* Backdrop-afbeelding van een item: gedimd, zodat de gradient er nog doorheen komt */
+.backdropContainer .backdropImage {
+    opacity: .35 !important;
+    filter: saturate(1.1) blur(2px);
+}
+
+/* Verberg scrollbalken */
+* {
+    scrollbar-width: none !important;
+}
+*::-webkit-scrollbar { display: none !important; }
+
+/* ~~~~~~~~~~~~~~~~~~~~ TEKSTKLEUREN ~~~~~~~~~~~~~~~~~~~~ */
+.cardText-secondary,
+.secondaryText,
+.listItemBodyText.secondary,
+.fieldDescription,
+.MuiTypography-root.MuiTypography-body2,
+.MuiListItemText-secondary {
+    color: var(--v-text-dim) !important;
+}
+
+a, .button-link, .emby-button.button-link {
+    color: var(--v-accent);
+}
+
+::selection {
+    background: var(--v-accent-strong);
+    color: #fff;
+}
+
+/* ~~~~~~~~~~~~~~~~~~~~ BOVENBALK (Jellyfin 12 / MUI) ~~~~~~~~~~~~~~~~~~~~ */
+.MuiAppBar-root,
+.skinHeader {
+    background: var(--v-glass) !important;
+    backdrop-filter: blur(var(--v-blur)) saturate(1.4) !important;
+    -webkit-backdrop-filter: blur(var(--v-blur)) saturate(1.4) !important;
+    border-bottom: 1px solid var(--v-border) !important;
+    box-shadow: none !important;
+    color: var(--v-text) !important;
+}
+
+.MuiToolbar-root .MuiIconButton-root,
+.headerButton {
+    color: var(--v-text) !important;
+    border-radius: 12px !important;
+    transition: var(--v-ease);
+}
+.MuiToolbar-root .MuiIconButton-root:hover,
+.headerButton:hover {
+    background: var(--v-accent-soft) !important;
+    color: var(--v-accent) !important;
+}
+
+/* Tabs onder de header */
+.MuiTab-root,
+.emby-tab-button {
+    color: var(--v-text-dim) !important;
+    text-transform: none !important;
+    font-weight: 500 !important;
+}
+.MuiTab-root.Mui-selected,
+.emby-tab-button-active {
+    color: var(--v-text) !important;
+}
+.MuiTabs-indicator,
+.emby-tab-button-active::after {
+    background: linear-gradient(90deg, var(--v-accent-3), var(--v-accent-2)) !important;
+    height: 3px !important;
+    border-radius: 3px !important;
+}
+
+/* ~~~~~~~~~~~~~~~~~~~~ ZIJMENU ~~~~~~~~~~~~~~~~~~~~ */
+.MuiDrawer-paper.MuiDrawer-paper,
+.mainDrawer {
+    background: var(--v-glass-strong) !important;
+    backdrop-filter: blur(var(--v-blur)) saturate(1.4) !important;
+    -webkit-backdrop-filter: blur(var(--v-blur)) saturate(1.4) !important;
+    border-right: 1px solid var(--v-border) !important;
+    border-radius: 0 28px 28px 0 !important;
+    color: var(--v-text) !important;
+}
+
+.MuiDrawer-paper .MuiListItemButton-root,
+.navMenuOption {
+    width: calc(100% - 20px) !important;
+    margin: 3px 10px !important;
+    border-radius: var(--v-radius-sm) !important;
+    color: var(--v-text-dim) !important;
+    transition: var(--v-ease) !important;
+}
+.MuiDrawer-paper .MuiListItemButton-root:hover,
+.navMenuOption:hover {
+    background: var(--v-accent-soft) !important;
+    color: var(--v-text) !important;
+}
+.MuiDrawer-paper .MuiListItemButton-root.Mui-selected,
+.navMenuOption-selected {
+    background: linear-gradient(90deg, var(--v-accent-mid), transparent) !important;
+    color: #fff !important;
+    box-shadow: inset 3px 0 0 var(--v-accent);
+}
+.MuiDrawer-paper .MuiListItemIcon-root {
+    color: inherit !important;
+}
+.MuiDrawer-paper .MuiDivider-root {
+    border-color: var(--v-border) !important;
+}
+
+/* ~~~~~~~~~~~~~~~~~~~~ KAARTEN ~~~~~~~~~~~~~~~~~~~~ */
+.card,
+.cardBox,
+.cardScalable,
+.cardPadder,
+.cardImageContainer,
+.cardContent,
+.cardOverlayContainer,
+.blurhash-canvas {
+    border-radius: var(--v-radius) !important;
+}
+
+.cardBox {
+    transition: transform var(--v-ease), box-shadow var(--v-ease) !important;
+}
+.cardBox:hover {
+    transform: translateY(-4px);
+}
+.cardBox:hover .cardScalable {
+    box-shadow: 0 10px 30px var(--v-accent-mid), 0 0 0 1px var(--v-border-glow);
+}
+.cardScalable {
+    overflow: hidden !important;
+    background: var(--v-glass) !important;
+    box-shadow: var(--v-shadow);
+}
+.cardOverlayContainer {
+    background: linear-gradient(to top, rgb(10 6 18 / 0.85), transparent 60%) !important;
+}
+.cardOverlayButton {
+    border-radius: 12px !important;
+}
+
+/* Voortgangsbalk op kaarten */
+.itemProgressBar {
+    background: rgb(255 255 255 / 0.18) !important;
+    border-radius: 4px !important;
+    height: 4px !important;
+}
+.itemProgressBarForeground {
+    background: linear-gradient(90deg, var(--v-accent-3), var(--v-accent-2)) !important;
+    border-radius: 4px !important;
+}
+
+/* Count/played-indicator */
+.countIndicator,
+.playedIndicator {
+    background: linear-gradient(135deg, var(--v-accent-3), var(--v-accent)) !important;
+    color: #fff !important;
+    border-radius: 999px !important;
+}
+
+/* ~~~~~~~~~~~~~~~~~~~~ LIJSTEN & SECTIES ~~~~~~~~~~~~~~~~~~~~ */
+.listItem {
+    border-radius: var(--v-radius-sm) !important;
+    transition: var(--v-ease) !important;
+}
+.listItem:hover,
+.listItem:focus-visible {
+    background: var(--v-accent-soft) !important;
+}
+
+.paperList,
+.detailSectionContent,
+.trackSelections {
+    background: var(--v-glass) !important;
+    backdrop-filter: blur(var(--v-blur));
+    -webkit-backdrop-filter: blur(var(--v-blur));
+    border: 1px solid var(--v-border);
+    border-radius: var(--v-radius) !important;
+}
+
+.sectionTitle,
+.sectionTitle-cards,
+.sectionTitleContainer .sectionTitle {
+    font-weight: 600 !important;
+    letter-spacing: -.01em;
+}
+
+/* ~~~~~~~~~~~~~~~~~~~~ KNOPPEN ~~~~~~~~~~~~~~~~~~~~ */
+.emby-button,
+.MuiButton-root,
+.button-flat,
+.raised {
+    border-radius: 12px !important;
+    transition: var(--v-ease) !important;
+}
+
+.raised.button-submit,
+.button-submit,
+.MuiButton-contained,
+.btnPlay,
+.btnResume {
+    background: linear-gradient(135deg, var(--v-accent-3), var(--v-accent) 55%, var(--v-accent-2)) !important;
+    color: #fff !important;
+    border: none !important;
+    box-shadow: 0 6px 20px var(--v-accent-mid);
+}
+.raised.button-submit:hover,
+.button-submit:hover,
+.MuiButton-contained:hover,
+.btnPlay:hover,
+.btnResume:hover {
+    filter: brightness(1.12);
+    box-shadow: 0 8px 26px var(--v-accent-strong);
+}
+
+.raised:not(.button-submit):not(.btnPlay):not(.btnResume),
+.button-flat,
+.MuiButton-outlined {
+    background: var(--v-glass) !important;
+    border: 1px solid var(--v-border) !important;
+    color: var(--v-text) !important;
+}
+.raised:not(.button-submit):hover,
+.MuiButton-outlined:hover {
+    background: var(--v-accent-soft) !important;
+    border-color: var(--v-border-glow) !important;
+}
+
+/* ~~~~~~~~~~~~~~~~~~~~ FORMULIEREN ~~~~~~~~~~~~~~~~~~~~ */
+.emby-input,
+.emby-textarea,
+.emby-select,
+.MuiOutlinedInput-root,
+.MuiInputBase-root,
+.searchfields-txtSearch {
+    background: var(--v-glass) !important;
+    color: var(--v-text) !important;
+    border: 1px solid var(--v-border) !important;
+    border-radius: 12px !important;
+    transition: var(--v-ease);
+}
+.MuiOutlinedInput-notchedOutline {
+    border: none !important;
+}
+.emby-input:focus,
+.emby-textarea:focus,
+.emby-select:focus,
+.MuiOutlinedInput-root.Mui-focused {
+    border-color: var(--v-accent) !important;
+    box-shadow: 0 0 0 3px var(--v-accent-soft) !important;
+}
+
+.emby-select-withcolor > option {
+    background: var(--v-glass-solid) !important;
+    color: var(--v-text) !important;
+}
+
+.emby-checkbox:checked + span + .checkboxOutline,
+.emby-checkbox:checked + span::before,
+.MuiCheckbox-root.Mui-checked,
+.MuiSwitch-switchBase.Mui-checked {
+    color: var(--v-accent) !important;
+}
+.MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track {
+    background-color: var(--v-accent) !important;
+}
+
+/* ~~~~~~~~~~~~~~~~~~~~ DIALOGEN, MENU'S, POPOVERS ~~~~~~~~~~~~~~~~~~~~ */
+/* Deze liggen boven willekeurige inhoud: dus bijna ondoorzichtig houden voor leesbaarheid */
+.dialog,
+.MuiDialog-paper,
+.MuiMenu-paper,
+.MuiPopover-paper.MuiPopover-paper,
+.MuiAccordion-root.MuiAccordion-root,
+.actionSheet,
+.actionSheetContent {
+    background: var(--v-glass-strong) !important;
+    backdrop-filter: blur(30px) saturate(1.4) !important;
+    -webkit-backdrop-filter: blur(30px) saturate(1.4) !important;
+    border: 1px solid var(--v-border) !important;
+    border-radius: var(--v-radius) !important;
+    box-shadow: var(--v-shadow) !important;
+    color: var(--v-text) !important;
+}
+.dialogBackdrop,
+.MuiBackdrop-root {
+    background: rgb(5 3 10 / 0.6) !important;
+}
+.MuiMenuItem-root:hover,
+.actionSheetMenuItem:hover {
+    background: var(--v-accent-soft) !important;
+}
+
+/* ~~~~~~~~~~~~~~~~~~~~ SLIDERS & VOORTGANG ~~~~~~~~~~~~~~~~~~~~ */
+.mdl-slider::-webkit-slider-thumb { background: var(--v-accent) !important; }
+.mdl-slider::-moz-range-thumb     { background: var(--v-accent) !important; }
+.mdl-slider-background-lower,
+.MuiSlider-track {
+    background: linear-gradient(90deg, var(--v-accent-3), var(--v-accent-2)) !important;
+}
+.MuiSlider-thumb { color: var(--v-accent) !important; }
+.MuiLinearProgress-bar,
+.mdl-spinner__layer {
+    background: var(--v-accent) !important;
+    border-color: var(--v-accent) !important;
+}
+
+/* ~~~~~~~~~~~~~~~~~~~~ DETAILPAGINA ~~~~~~~~~~~~~~~~~~~~ */
+.detailRibbon {
+    background: transparent !important;
+}
+.detailPagePrimaryContainer,
+.detailPageSecondaryContainer {
+    background: transparent !important;
+}
+.detailImageContainer .card,
+.detailImageContainer .cardBox {
+    box-shadow: 0 20px 50px rgb(0 0 0 / 0.55), 0 0 0 1px var(--v-border);
+}
+.itemName.parentNameLast,
+.itemName {
+    font-weight: 700 !important;
+    letter-spacing: -.02em;
+}
+.mediaInfoItem,
+.mediaInfoText {
+    color: var(--v-text-dim) !important;
+}
+.mediaInfoOfficialRating,
+.mediaInfoItem.mediaInfoText {
+    border-radius: 6px !important;
+}
+
+/* ~~~~~~~~~~~~~~~~~~~~ SPELER ~~~~~~~~~~~~~~~~~~~~ */
+.videoOsdBottom,
+.nowPlayingBar {
+    background: var(--v-glass-strong) !important;
+    backdrop-filter: blur(var(--v-blur));
+    -webkit-backdrop-filter: blur(var(--v-blur));
+    border-top: 1px solid var(--v-border);
+}
+.osdControls .paper-icon-button-light:hover {
+    color: var(--v-accent) !important;
+}
+
+/* ~~~~~~~~~~~~~~~~~~~~ LOGINPAGINA ~~~~~~~~~~~~~~~~~~~~ */
+#loginPage .padded-left.padded-right.padded-bottom-page,
+#loginPage .readOnlyContent {
+    background: var(--v-glass) !important;
+    backdrop-filter: blur(var(--v-blur)) saturate(1.4);
+    -webkit-backdrop-filter: blur(var(--v-blur)) saturate(1.4);
+    border: 1px solid var(--v-border);
+    border-radius: 24px !important;
+    box-shadow: var(--v-shadow);
+    max-width: 28em !important;
+    margin: 0 auto !important;
+}
+
+/* ~~~~~~~~~~~~~~~~~~~~ KLEINE DETAILS ~~~~~~~~~~~~~~~~~~~~ */
+:focus-visible {
+    outline: 2px solid var(--v-accent) !important;
+    outline-offset: 2px;
+}
+
+.MuiChip-root {
+    background: var(--v-accent-soft) !important;
+    color: var(--v-text) !important;
+}
+
+.MuiAvatar-root {
+    box-shadow: 0 0 0 2px var(--v-border-glow);
+}
+
+/* Fallback voor browsers zonder backdrop-filter */
+@supports not (backdrop-filter: blur(1px)) {
+    .MuiAppBar-root, .MuiDrawer-paper, .dialog, .MuiMenu-paper, .MuiPopover-paper {
+        background: var(--v-glass-solid) !important;
+    }
+}
+
+/* ~~~~~~~~~~~~~~~~~~~~ MOBIEL ~~~~~~~~~~~~~~~~~~~~ */
+@media (max-width: 600px) {
+    :root {
+        --v-blur: 14px;
+        --v-radius: 12px;
+    }
+    .MuiDrawer-paper.MuiDrawer-paper { border-radius: 0 20px 20px 0 !important; }
+}

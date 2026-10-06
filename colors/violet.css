@@ -1,0 +1,36 @@
+/* Amethyst - Violet palette (default)
+   Alle kleuren van het thema staan hier. Een nieuwe kleurvariant = dit bestand kopieren en aanpassen. */
+:root {
+    /* Accent als losse kanalen, zodat we er overal een alpha aan kunnen hangen */
+    --v-accent-r: 167;
+    --v-accent-g: 110;
+    --v-accent-b: 255;
+
+    --v-accent:        rgb(var(--v-accent-r) var(--v-accent-g) var(--v-accent-b));
+    --v-accent-soft:   rgb(var(--v-accent-r) var(--v-accent-g) var(--v-accent-b) / 0.18);
+    --v-accent-mid:    rgb(var(--v-accent-r) var(--v-accent-g) var(--v-accent-b) / 0.35);
+    --v-accent-strong: rgb(var(--v-accent-r) var(--v-accent-g) var(--v-accent-b) / 0.65);
+    --v-accent-2:      #e879f9; /* magenta, voor de gradient */
+    --v-accent-3:      #6366f1; /* indigo, voor de gradient */
+
+    /* Tekst */
+    --v-text:       #f3eefe;
+    --v-text-dim:   #b9aed3;
+    --v-text-faint: #8a7fa6;
+
+    /* Achtergrond */
+    --v-bg:         #0a0612;
+    --v-bg-gradient:
+        radial-gradient(1200px 800px at 12% -10%, rgb(124 58 237 / 0.55), transparent 60%),
+        radial-gradient(1000px 700px at 100% 10%, rgb(232 121 249 / 0.28), transparent 55%),
+        radial-gradient(900px 900px at 50% 120%, rgb(99 102 241 / 0.40), transparent 60%),
+        linear-gradient(160deg, #130a24 0%, #0a0612 55%, #0d0820 100%);
+
+    /* Glas */
+    --v-glass:        rgb(28 18 48 / 0.45);
+    --v-glass-strong: rgb(22 14 40 / 0.72);
+    --v-glass-solid:  #1a1030;
+    --v-border:       rgb(255 255 255 / 0.10);
+    --v-border-glow:  rgb(var(--v-accent-r) var(--v-accent-g) var(--v-accent-b) / 0.45);
+    --v-shadow:       0 8px 32px rgb(0 0 0 / 0.45);
+}
