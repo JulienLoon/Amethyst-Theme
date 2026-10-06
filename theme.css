@@ -1,477 +1,1375 @@
 /*
 ================================================================================
-  AMETHYST - a dark, glassy, violet theme for Jellyfin 12.x
-  Hoofdbestand. Importeer dit in Dashboard > General > Custom CSS Code.
+  AMETHYST-THEME
+  Een donker, glassy en transparant paars thema voor Jellyfin 12.x
+
+  Installatie: Dashboard > General > Custom CSS Code
+  @import url("https://cdn.jsdelivr.net/gh/JulienLoon/Amethyst-Theme@main/theme.css");
 ================================================================================
 */
 
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
-@import url("https://cdn.jsdelivr.net/gh/JulienLoon/Amethyst-Theme@main/colors/violet.css");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
+@import url("https://cdn.jsdelivr.net/gh/JulienLoon/Amethyst-Theme@main/colors/amethyst.css");
 
 :root {
-    --theme-name: 'Amethyst-Theme';
-    --v-radius:    16px;
-    --v-radius-sm: 10px;
-    --v-blur:      22px;
-    --v-ease:      .2s ease;
+    --am-font: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    --am-radius-lg: 22px;
+    --am-radius: 14px;
+    --am-radius-sm: 10px;
+    --am-blur: 24px;
+    --am-ease: cubic-bezier(.2, .7, .2, 1);
+    --am-fast: .18s var(--am-ease);
+    --am-slow: .35s var(--am-ease);
+    --am-header-gap: 10px;
 }
 
-/* ~~~~~~~~~~~~~~~~~~~~ FONT ~~~~~~~~~~~~~~~~~~~~ */
-body, button, input, select, textarea,
-h1, h2, h3, h4, h5, h6, p,
-.MuiTypography-root, .MuiButton-root, .MuiInputBase-root {
-    font-family: 'Inter', system-ui, sans-serif !important;
-}
 
-/* ~~~~~~~~~~~~~~~~~~~~ ACHTERGROND ~~~~~~~~~~~~~~~~~~~~ */
-html {
-    background: var(--v-bg) !important;
-    color: var(--v-text);
+/* =============================================================================
+   1. BASIS: lettertype, tekst, scrollbalken
+   ============================================================================= */
+
+html,
+body,
+button,
+input,
+select,
+textarea,
+h1, h2, h3, h4, h5, h6,
+.MuiTypography-root,
+.MuiButtonBase-root,
+.MuiInputBase-root,
+.MuiListItemText-primary,
+.MuiListItemText-secondary {
+    font-family: var(--am-font) !important;
+    font-feature-settings: 'cv11', 'ss01';
+    -webkit-font-smoothing: antialiased;
 }
 
 body {
-    background: var(--v-bg-gradient) fixed !important;
-    color: var(--v-text) !important;
+    color: var(--am-text) !important;
 }
 
-/* Laat de gradient door alle lagen heen schijnen */
+h1, h2, h3, .sectionTitle, .itemName, .pageTitle {
+    letter-spacing: -0.02em;
+}
+
+.secondaryText,
+.cardText-secondary,
+.listItemBodyText.secondary,
+.fieldDescription,
+.mediaInfoItem,
+.MuiListItemText-secondary {
+    color: var(--am-text-dim) !important;
+}
+
+a:not(.MuiButtonBase-root):not(.cardImageContainer):not(.itemAction):not(.emby-button) {
+    color: var(--am-text);
+}
+
+::selection {
+    background: rgb(var(--am-accent-rgb) / 0.45);
+    color: #fff;
+}
+
+/* Dunne paarse scrollbalk i.p.v. de grijze standaard */
+html {
+    scrollbar-width: thin;
+    scrollbar-color: rgb(var(--am-accent-rgb) / 0.35) transparent;
+}
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+    background: rgb(var(--am-accent-rgb) / 0.3);
+    border-radius: 8px;
+}
+::-webkit-scrollbar-thumb:hover { background: rgb(var(--am-accent-rgb) / 0.55); }
+
+:focus-visible {
+    outline: 2px solid var(--am-accent) !important;
+    outline-offset: 2px;
+}
+
+
+/* =============================================================================
+   2. ACHTERGROND
+   De aurora staat op de vaste .backdropContainer. NIET op body: body is een
+   gewoon blok van 1 schermhoogte en zou bij scrollen een harde rand geven.
+   ============================================================================= */
+
+html {
+    background: var(--am-bg) !important;
+}
+
+body,
 .skinBody,
 .mainAnimatedPages,
 .page,
 .libraryPage,
+.pageTabContent,
+.homeSectionsContainer,
+.verticalSection,
+.emby-scroller,
+.scrollSlider,
+.itemsContainer {
+    background: transparent !important;
+}
+
 .backgroundContainer,
 .backgroundContainer.withBackdrop {
     background: transparent !important;
 }
 
-/* Backdrop-afbeelding van een item: gedimd, zodat de gradient er nog doorheen komt */
-.backdropContainer .backdropImage {
-    opacity: .10 !important;
-    filter: saturate(1.2) blur(28px) brightness(.8);
-    transform: scale(1.1); /* verbergt de lichte rand die blur aan de randen geeft */
-}
-
-/* Zelfde gradient bovenop de backdrop, zodat de achtergrond overal egaal paars is */
 .backdropContainer {
-    background: var(--v-bg-gradient) !important;
+    background: var(--am-bg) !important;
+    overflow: hidden;
 }
 
-/* Het homescherm en tabbladen tekenen soms een eigen laag: transparant maken, geen harde rand */
-.libraryDocument .backgroundContainer,
-.libraryDocument.withSectionTabs .backgroundContainer,
-.pageTabContent,
-.homePage,
-.homeSectionsContainer,
-.verticalSection,
-.verticalSection > *:not(.sectionTitleContainer):not(.emby-scroller),
-.emby-scroller,
-.emby-scrollbuttons,
-.scrollSlider,
-.itemsContainer,
-.padded-left.padded-right,
-.focuscontainer-x {
-    background: transparent !important;
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
+/* Aurora-laag, beweegt heel langzaam */
+.backdropContainer::before {
+    content: "";
+    position: absolute;
+    inset: -15%;
+    background: var(--am-aurora);
+    animation: am-aurora 38s ease-in-out infinite alternate;
+    will-change: transform;
+    pointer-events: none;
 }
 
-/* Verberg scrollbalken */
-* {
-    scrollbar-width: none !important;
-}
-*::-webkit-scrollbar { display: none !important; }
-
-/* ~~~~~~~~~~~~~~~~~~~~ TEKSTKLEUREN ~~~~~~~~~~~~~~~~~~~~ */
-.cardText-secondary,
-.secondaryText,
-.listItemBodyText.secondary,
-.fieldDescription,
-.MuiTypography-root.MuiTypography-body2,
-.MuiListItemText-secondary {
-    color: var(--v-text-dim) !important;
+@keyframes am-aurora {
+    0%   { transform: translate3d(0, 0, 0) scale(1); }
+    50%  { transform: translate3d(-3%, 2%, 0) scale(1.06); }
+    100% { transform: translate3d(2%, -2%, 0) scale(1.03); }
 }
 
-a, .button-link, .emby-button.button-link {
-    color: var(--v-accent);
+/* Item-backdrop (fanart): heel zacht, alleen een sfeerkleur */
+.backdropImage {
+    opacity: 0.14 !important;
+    filter: blur(30px) saturate(1.3);
+    transform: scale(1.12);
 }
 
-::selection {
-    background: var(--v-accent-strong);
-    color: #fff;
+/* Zachte vignet bovenop alles, houdt tekst leesbaar */
+.backdropContainer::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(120% 90% at 50% 0%, transparent 40%, rgb(8 5 15 / 0.55) 100%),
+        linear-gradient(180deg, transparent 60%, rgb(8 5 15 / 0.5) 100%);
+    pointer-events: none;
+    z-index: 2; /* boven .backdropImage (z-index 1) */
 }
 
-/* ~~~~~~~~~~~~~~~~~~~~ BOVENBALK (Jellyfin 12 / MUI) ~~~~~~~~~~~~~~~~~~~~ */
-.MuiAppBar-root,
-.skinHeader {
-    background: var(--v-glass) !important;
-    backdrop-filter: blur(var(--v-blur)) saturate(1.4) !important;
-    -webkit-backdrop-filter: blur(var(--v-blur)) saturate(1.4) !important;
-    border-bottom: 1px solid var(--v-border) !important;
-    box-shadow: none !important;
-    color: var(--v-text) !important;
+/* Iets ruimte onder de zwevende header */
+.layout-desktop .mainAnimatedPage.libraryPage {
+    margin-top: 14px;
+}
+.layout-desktop .mainAnimatedPage.libraryPage:not(.noSecondaryNavPage) {
+    margin-top: 22px;
 }
 
-.MuiToolbar-root .MuiIconButton-root,
-.headerButton {
-    color: var(--v-text) !important;
-    border-radius: 12px !important;
-    transition: var(--v-ease);
-}
-.MuiToolbar-root .MuiIconButton-root:hover,
-.headerButton:hover {
-    background: var(--v-accent-soft) !important;
-    color: var(--v-accent) !important;
+
+/* =============================================================================
+   3. HEADER (Jellyfin 12 / MUI AppBar) - zwevende glazen balk
+   ============================================================================= */
+
+.MuiAppBar-root.MuiAppBar-positionFixed {
+    top: var(--am-header-gap) !important;
+    left: 14px !important;
+    right: 14px !important;
+    width: auto !important;
+    border-radius: 18px !important;
+    background: rgb(22 14 40 / 0.55) !important;
+    backdrop-filter: blur(var(--am-blur)) saturate(1.6) !important;
+    -webkit-backdrop-filter: blur(var(--am-blur)) saturate(1.6) !important;
+    border: 1px solid var(--am-border) !important;
+    box-shadow: 0 8px 30px rgb(0 0 0 / 0.35), inset 0 1px 0 rgb(255 255 255 / 0.06) !important;
+    color: var(--am-text) !important;
 }
 
-/* Tabs onder de header */
-.MuiTab-root,
-.emby-tab-button {
-    color: var(--v-text-dim) !important;
+.MuiAppBar-root .MuiToolbar-root {
+    gap: 2px;
+}
+
+/* Nav-knoppen in de balk */
+.MuiAppBar-root .MuiButton-root {
     text-transform: none !important;
     font-weight: 500 !important;
+    letter-spacing: 0 !important;
+    color: var(--am-text-dim) !important;
+    border-radius: 11px !important;
+    padding: 5px 12px !important;
+    transition: background var(--am-fast), color var(--am-fast) !important;
 }
+
+.MuiAppBar-root .MuiButton-root:hover {
+    background: rgb(var(--am-accent-rgb) / 0.12) !important;
+    color: var(--am-text) !important;
+}
+
+/* Actieve bibliotheek */
+.MuiAppBar-root .MuiButton-root.MuiButton-colorPrimary {
+    color: #fff !important;
+    background: linear-gradient(120deg, rgb(var(--am-accent-3-rgb) / 0.32), rgb(var(--am-accent-2-rgb) / 0.22)) !important;
+    box-shadow: inset 0 0 0 1px rgb(var(--am-accent-rgb) / 0.35);
+}
+
+.MuiAppBar-root .MuiButton-root .MuiButton-startIcon svg {
+    font-size: 1.15em !important;
+    opacity: .9;
+}
+
+/* Knoppengroepen (Play All + Shuffle, filter/sort): als een geheel, niet per knop afronden */
+.MuiButtonGroup-root {
+    border-radius: 12px !important;
+    overflow: hidden;
+    background: rgb(255 255 255 / 0.05);
+    box-shadow: inset 0 0 0 1px var(--am-border-hi);
+}
+
+.MuiButtonGroup-root .MuiButtonGroup-grouped {
+    border-radius: 0 !important;
+    border: 0 !important;
+    min-width: 40px !important;
+}
+
+.MuiButtonGroup-root .MuiButtonGroup-grouped:not(:last-of-type) {
+    border-right: 1px solid var(--am-border) !important;
+}
+
+.MuiAppBar-root .MuiButtonGroup-root .MuiButton-root {
+    padding: 5px 12px !important;
+}
+
+/* Servernaam/logo */
+.MuiAppBar-root .MuiButton-root:has(img) {
+    color: var(--am-text) !important;
+    font-weight: 700 !important;
+    letter-spacing: -0.01em !important;
+    margin-right: 6px;
+}
+
+/* Icoonknoppen rechts */
+.MuiAppBar-root .MuiIconButton-root {
+    color: var(--am-text-dim) !important;
+    border-radius: 12px !important;
+    transition: background var(--am-fast), color var(--am-fast) !important;
+}
+
+.MuiAppBar-root .MuiIconButton-root:hover {
+    background: rgb(var(--am-accent-rgb) / 0.14) !important;
+    color: var(--am-text) !important;
+}
+
+/* Avatar */
+.MuiAppBar-root .MuiAvatar-root {
+    background: var(--am-gradient) !important;
+    color: #fff !important;
+    box-shadow: 0 0 0 2px rgb(255 255 255 / 0.12);
+}
+
+/* Legacy header (oudere pagina's / mobiel) */
+.skinHeader {
+    background: transparent !important;
+    color: var(--am-text) !important;
+}
+
+.skinHeader.semiTransparent,
+.skinHeader-withBackground {
+    background: rgb(22 14 40 / 0.55) !important;
+    backdrop-filter: blur(var(--am-blur)) saturate(1.6);
+    -webkit-backdrop-filter: blur(var(--am-blur)) saturate(1.6);
+}
+
+
+
+/* =============================================================================
+   4. TABS (Movies / Suggestions / Genres ...)
+   ============================================================================= */
+
+.MuiTabs-root,
+.headerTabs,
+.emby-tabs {
+    background: transparent !important;
+}
+
+.MuiTab-root,
+.emby-tab-button {
+    text-transform: none !important;
+    font-weight: 500 !important;
+    color: var(--am-text-dim) !important;
+    border-radius: 10px !important;
+    transition: color var(--am-fast), background var(--am-fast) !important;
+    min-height: 38px !important;
+}
+
+.MuiTab-root:hover,
+.emby-tab-button:hover {
+    color: var(--am-text) !important;
+    background: rgb(var(--am-accent-rgb) / 0.10) !important;
+}
+
 .MuiTab-root.Mui-selected,
 .emby-tab-button-active {
-    color: var(--v-text) !important;
+    color: #fff !important;
 }
-.MuiTabs-indicator,
-.emby-tab-button-active::after {
-    background: linear-gradient(90deg, var(--v-accent-3), var(--v-accent-2)) !important;
+
+.MuiTabs-indicator {
+    background: var(--am-gradient) !important;
     height: 3px !important;
     border-radius: 3px !important;
 }
 
-/* ~~~~~~~~~~~~~~~~~~~~ ZIJMENU ~~~~~~~~~~~~~~~~~~~~ */
+.emby-tab-button-active {
+    background: rgb(var(--am-accent-rgb) / 0.16) !important;
+}
+
+
+/* =============================================================================
+   5. ZIJMENU (MUI Drawer + legacy mainDrawer)
+   ============================================================================= */
+
 .MuiDrawer-paper.MuiDrawer-paper,
 .mainDrawer {
-    background: var(--v-glass-strong) !important;
-    backdrop-filter: blur(var(--v-blur)) saturate(1.4) !important;
-    -webkit-backdrop-filter: blur(var(--v-blur)) saturate(1.4) !important;
-    border-right: 1px solid var(--v-border) !important;
-    border-radius: 0 28px 28px 0 !important;
-    color: var(--v-text) !important;
+    background: var(--am-glass-strong) !important;
+    backdrop-filter: blur(30px) saturate(1.6) !important;
+    -webkit-backdrop-filter: blur(30px) saturate(1.6) !important;
+    border: 0 !important;
+    border-right: 1px solid var(--am-border) !important;
+    border-radius: 0 24px 24px 0 !important;
+    color: var(--am-text) !important;
 }
 
 .MuiDrawer-paper .MuiListItemButton-root,
 .navMenuOption {
-    width: calc(100% - 20px) !important;
-    margin: 3px 10px !important;
-    border-radius: var(--v-radius-sm) !important;
-    color: var(--v-text-dim) !important;
-    transition: var(--v-ease) !important;
+    margin: 2px 10px !important;
+    border-radius: 12px !important;
+    color: var(--am-text-dim) !important;
+    transition: background var(--am-fast), color var(--am-fast) !important;
 }
+
 .MuiDrawer-paper .MuiListItemButton-root:hover,
 .navMenuOption:hover {
-    background: var(--v-accent-soft) !important;
-    color: var(--v-text) !important;
+    background: rgb(var(--am-accent-rgb) / 0.12) !important;
+    color: var(--am-text) !important;
 }
+
 .MuiDrawer-paper .MuiListItemButton-root.Mui-selected,
 .navMenuOption-selected {
-    background: linear-gradient(90deg, var(--v-accent-mid), transparent) !important;
+    background: linear-gradient(90deg, rgb(var(--am-accent-rgb) / 0.28), rgb(var(--am-accent-rgb) / 0.06)) !important;
     color: #fff !important;
-    box-shadow: inset 3px 0 0 var(--v-accent);
+    box-shadow: inset 3px 0 0 var(--am-accent);
 }
+
 .MuiDrawer-paper .MuiListItemIcon-root {
     color: inherit !important;
 }
-.MuiDrawer-paper .MuiDivider-root {
-    border-color: var(--v-border) !important;
+
+.MuiDrawer-paper .MuiListSubheader-root {
+    background: transparent !important;
+    color: var(--am-text-faint) !important;
+    font-size: .72rem !important;
+    text-transform: uppercase;
+    letter-spacing: .08em !important;
 }
 
-/* ~~~~~~~~~~~~~~~~~~~~ KAARTEN ~~~~~~~~~~~~~~~~~~~~ */
-.card,
-.cardBox,
+.MuiDivider-root {
+    border-color: var(--am-border) !important;
+}
+
+
+/* =============================================================================
+   6. SECTIES & RIJEN (homescherm)
+   ============================================================================= */
+
+.sectionTitle,
+.sectionTitle-cards {
+    font-size: 1.32em !important;
+    font-weight: 700 !important;
+    color: var(--am-text) !important;
+}
+
+/* Titel-links ("Recently Added in ...") - geen knopstijl */
+.sectionTitleContainer .emby-button,
+.sectionTitleContainer a,
+.sectionTitleTextButton {
+    background: none !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    color: var(--am-text) !important;
+    transition: color var(--am-fast) !important;
+}
+
+.sectionTitleContainer a:hover,
+.sectionTitleTextButton:hover {
+    color: var(--am-accent) !important;
+}
+
+.sectionTitleContainer a .material-icons,
+.sectionTitleTextButton .material-icons {
+    color: var(--am-text-faint);
+    transition: transform var(--am-fast), color var(--am-fast);
+}
+
+.sectionTitleContainer a:hover .material-icons {
+    color: var(--am-accent);
+    transform: translateX(3px);
+}
+
+/* Pijltjes rechts boven een rij */
+.emby-scrollbuttons-button {
+    background: var(--am-glass) !important;
+    border: 1px solid var(--am-border) !important;
+    border-radius: 50% !important;
+    color: var(--am-text) !important;
+    width: 34px !important;
+    height: 34px !important;
+    margin-left: 6px !important;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    transition: background var(--am-fast), border-color var(--am-fast) !important;
+}
+
+.emby-scrollbuttons-button:hover:not(:disabled) {
+    background: rgb(var(--am-accent-rgb) / 0.22) !important;
+    border-color: rgb(var(--am-accent-rgb) / 0.45) !important;
+}
+
+.emby-scrollbuttons-button:disabled {
+    opacity: .3 !important;
+}
+
+
+/* =============================================================================
+   7. KAARTEN
+   ============================================================================= */
+
 .cardScalable,
-.cardPadder,
 .cardImageContainer,
 .cardContent,
 .cardOverlayContainer,
-.blurhash-canvas {
-    border-radius: var(--v-radius) !important;
+.blurhash-canvas,
+.cardPadder {
+    border-radius: var(--am-radius) !important;
+}
+
+.cardScalable {
+    overflow: hidden;
+    background: var(--am-glass) !important;
+    box-shadow: 0 6px 22px rgb(0 0 0 / 0.38), 0 0 0 1px rgb(255 255 255 / 0.06);
+    transition: transform var(--am-slow), box-shadow var(--am-slow) !important;
 }
 
 .cardBox {
-    transition: transform var(--v-ease), box-shadow var(--v-ease) !important;
+    border: 0 !important;
+    background: transparent !important;
 }
-.cardBox:hover {
-    transform: translateY(-4px);
+
+/* Hover: optillen + paarse gloed */
+@media (hover: hover) {
+    .card:hover .cardScalable {
+        transform: translateY(-5px);
+        box-shadow:
+            0 16px 36px rgb(0 0 0 / 0.5),
+            0 0 0 1px rgb(var(--am-accent-rgb) / 0.55),
+            0 8px 34px rgb(var(--am-accent-rgb) / 0.28);
+    }
 }
-.cardBox:hover .cardScalable {
-    box-shadow: 0 10px 30px var(--v-accent-mid), 0 0 0 1px var(--v-border-glow);
+
+/* Focus (toetsenbord / TV) */
+.card:focus .cardBox.visualCardBox,
+.card:focus .cardBox:not(.visualCardBox) .cardScalable {
+    border: 0 !important;
+    box-shadow: 0 0 0 2px var(--am-accent), 0 8px 34px rgb(var(--am-accent-rgb) / 0.35) !important;
 }
-.cardScalable {
-    overflow: hidden !important;
-    background: var(--v-glass) !important;
-    box-shadow: var(--v-shadow);
-}
+
 .cardOverlayContainer {
-    background: linear-gradient(to top, rgb(10 6 18 / 0.85), transparent 60%) !important;
+    background: linear-gradient(180deg, rgb(8 5 15 / 0) 35%, rgb(8 5 15 / 0.82) 100%) !important;
 }
+
 .cardOverlayButton {
     border-radius: 12px !important;
+    transition: background var(--am-fast) !important;
 }
+
+.cardOverlayButton:hover {
+    background: rgb(var(--am-accent-rgb) / 0.3) !important;
+}
+
+/* Grote play-knop midden op de kaart */
+.cardOverlayFab-primary {
+    background: var(--am-gradient) !important;
+    color: #fff !important;
+    box-shadow: 0 6px 20px rgb(var(--am-accent-rgb) / 0.45) !important;
+}
+
+/* Kaarttekst */
+.cardText {
+    color: var(--am-text) !important;
+    font-weight: 500;
+}
+
+.cardText-secondary {
+    color: var(--am-text-faint) !important;
+    font-weight: 400;
+    font-size: .88em;
+}
+
+/* Placeholder-kaarten zonder afbeelding (standaard blauw) */
+.defaultCardBackground,
+.defaultCardBackground1,
+.defaultCardBackground2,
+.defaultCardBackground3,
+.defaultCardBackground4,
+.defaultCardBackground5 {
+    color: rgb(255 255 255 / 0.85) !important;
+}
+.defaultCardBackground1 { background: linear-gradient(135deg, #4c1d95, #7c3aed) !important; }
+.defaultCardBackground2 { background: linear-gradient(135deg, #312e81, #6d28d9) !important; }
+.defaultCardBackground3 { background: linear-gradient(135deg, #581c87, #a21caf) !important; }
+.defaultCardBackground4 { background: linear-gradient(135deg, #3b0764, #6366f1) !important; }
+.defaultCardBackground5 { background: linear-gradient(135deg, #2e1065, #9333ea) !important; }
 
 /* Voortgangsbalk op kaarten */
 .itemProgressBar {
+    height: 5px !important;
     background: rgb(255 255 255 / 0.18) !important;
-    border-radius: 4px !important;
-    height: 4px !important;
-}
-.itemProgressBarForeground {
-    background: linear-gradient(90deg, var(--v-accent-3), var(--v-accent-2)) !important;
-    border-radius: 4px !important;
+    border-radius: 5px !important;
+    margin: 0 8px 8px !important;
+    overflow: hidden;
 }
 
-/* Count/played-indicator */
+.itemProgressBarForeground {
+    background: var(--am-gradient) !important;
+    border-radius: 5px !important;
+}
+
+/* Indicatoren: aantal, bekeken */
 .countIndicator,
-.playedIndicator {
-    background: linear-gradient(135deg, var(--v-accent-3), var(--v-accent)) !important;
+.playedIndicator,
+.fullSyncIndicator,
+.mediaSourceIndicator {
+    background: var(--am-gradient) !important;
     color: #fff !important;
+    font-weight: 700 !important;
+    box-shadow: 0 2px 10px rgb(0 0 0 / 0.4);
+    border: 1px solid rgb(255 255 255 / 0.18);
+}
+
+.indicator {
     border-radius: 999px !important;
 }
 
-/* ~~~~~~~~~~~~~~~~~~~~ LIJSTEN & SECTIES ~~~~~~~~~~~~~~~~~~~~ */
-.listItem {
-    border-radius: var(--v-radius-sm) !important;
-    transition: var(--v-ease) !important;
-}
-.listItem:hover,
-.listItem:focus-visible {
-    background: var(--v-accent-soft) !important;
+/* Selectiemodus */
+.itemSelectionPanel {
+    border-color: var(--am-accent) !important;
+    border-radius: var(--am-radius) !important;
 }
 
-.paperList,
-.detailSectionContent,
-.trackSelections {
-    background: var(--v-glass) !important;
-    backdrop-filter: blur(var(--v-blur));
-    -webkit-backdrop-filter: blur(var(--v-blur));
-    border: 1px solid var(--v-border);
-    border-radius: var(--v-radius) !important;
-}
-
-.sectionTitle,
-.sectionTitle-cards,
-.sectionTitleContainer .sectionTitle {
-    font-weight: 600 !important;
-    letter-spacing: -.01em;
-}
-
-/* ~~~~~~~~~~~~~~~~~~~~ KNOPPEN ~~~~~~~~~~~~~~~~~~~~ */
-.emby-button,
-.MuiButton-root,
-.button-flat,
-.raised {
-    border-radius: 12px !important;
-    transition: var(--v-ease) !important;
-}
-
-.raised.button-submit,
-.button-submit,
-.MuiButton-contained,
-.btnPlay,
-.btnResume {
-    background: linear-gradient(135deg, var(--v-accent-3), var(--v-accent) 55%, var(--v-accent-2)) !important;
+.selectionCommandsPanel {
+    background: var(--am-gradient) !important;
     color: #fff !important;
-    border: none !important;
-    box-shadow: 0 6px 20px var(--v-accent-mid);
-}
-.raised.button-submit:hover,
-.button-submit:hover,
-.MuiButton-contained:hover,
-.btnPlay:hover,
-.btnResume:hover {
-    filter: brightness(1.12);
-    box-shadow: 0 8px 26px var(--v-accent-strong);
 }
 
-.raised:not(.button-submit):not(.btnPlay):not(.btnResume),
+
+/* =============================================================================
+   8. KNOPPEN
+   ============================================================================= */
+
+.emby-button,
+.raised,
 .button-flat,
+.fab,
+.MuiButton-root {
+    border-radius: 12px !important;
+    text-transform: none !important;
+    letter-spacing: 0 !important;
+    font-weight: 600 !important;
+    transition: background var(--am-fast), border-color var(--am-fast), box-shadow var(--am-fast), filter var(--am-fast) !important;
+}
+
+/* Primaire knoppen */
+.button-submit,
+.raised.button-submit,
+.MuiButton-contained.MuiButton-containedPrimary,
+.btnPlay.raised {
+    background: var(--am-gradient) !important;
+    color: #fff !important;
+    border: 0 !important;
+    box-shadow: 0 6px 20px rgb(var(--am-accent-rgb) / 0.32), inset 0 1px 0 rgb(255 255 255 / 0.2) !important;
+}
+
+.button-submit:hover,
+.MuiButton-contained.MuiButton-containedPrimary:hover,
+.btnPlay.raised:hover {
+    filter: brightness(1.1) saturate(1.1);
+    box-shadow: 0 8px 28px rgb(var(--am-accent-rgb) / 0.48), inset 0 1px 0 rgb(255 255 255 / 0.25) !important;
+}
+
+/* Secundaire knoppen */
+.raised:not(.button-submit):not(.btnPlay),
 .MuiButton-outlined {
-    background: var(--v-glass) !important;
-    border: 1px solid var(--v-border) !important;
-    color: var(--v-text) !important;
+    background: var(--am-glass) !important;
+    border: 1px solid var(--am-border-hi) !important;
+    color: var(--am-text) !important;
 }
-.raised:not(.button-submit):hover,
+
+.raised:not(.button-submit):not(.btnPlay):hover,
 .MuiButton-outlined:hover {
-    background: var(--v-accent-soft) !important;
-    border-color: var(--v-border-glow) !important;
+    background: var(--am-glass-hover) !important;
+    border-color: rgb(var(--am-accent-rgb) / 0.45) !important;
 }
 
-/* Titel-links boven rijen ("Recently Added in ...") zijn ook emby-buttons: geen vak eromheen */
-.sectionTitleTextButton,
-.sectionTitleContainer .emby-button,
-.sectionTitleContainer a,
-.sectionTitleButton,
-.sectionTitleContainer .paper-icon-button-light {
-    background: none !important;
-    border: none !important;
-    box-shadow: none !important;
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-}
-.sectionTitleTextButton:hover,
-.sectionTitleContainer .emby-button:hover {
-    color: var(--v-accent) !important;
+.button-flat:hover,
+.button-link {
+    color: var(--am-accent) !important;
 }
 
-/* ~~~~~~~~~~~~~~~~~~~~ FORMULIEREN ~~~~~~~~~~~~~~~~~~~~ */
+.button-link:hover {
+    text-decoration: none !important;
+    filter: brightness(1.15);
+}
+
+/* Ronde icoonknoppen */
+.paper-icon-button-light {
+    border-radius: 50%;
+    transition: background var(--am-fast), color var(--am-fast) !important;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .paper-icon-button-light:hover:not(:disabled) {
+        background: rgb(var(--am-accent-rgb) / 0.16) !important;
+        color: #fff !important;
+    }
+}
+
+
+/* =============================================================================
+   9. FORMULIEREN
+   ============================================================================= */
+
 .emby-input,
 .emby-textarea,
 .emby-select,
-.MuiOutlinedInput-root,
-.MuiInputBase-root,
+.emby-select-withcolor,
 .searchfields-txtSearch {
-    background: var(--v-glass) !important;
-    color: var(--v-text) !important;
-    border: 1px solid var(--v-border) !important;
+    background: rgb(255 255 255 / 0.05) !important;
+    border: 1px solid var(--am-border-hi) !important;
     border-radius: 12px !important;
-    transition: var(--v-ease);
+    color: var(--am-text) !important;
+    transition: border-color var(--am-fast), box-shadow var(--am-fast), background var(--am-fast) !important;
 }
-.MuiOutlinedInput-notchedOutline {
-    border: none !important;
+
+.emby-input:hover,
+.emby-textarea:hover,
+.emby-select-withcolor:hover {
+    background: rgb(255 255 255 / 0.07) !important;
 }
+
 .emby-input:focus,
 .emby-textarea:focus,
-.emby-select:focus,
-.MuiOutlinedInput-root.Mui-focused {
-    border-color: var(--v-accent) !important;
-    box-shadow: 0 0 0 3px var(--v-accent-soft) !important;
+.emby-select-withcolor:focus {
+    border-color: var(--am-accent) !important;
+    box-shadow: 0 0 0 4px rgb(var(--am-accent-rgb) / 0.18) !important;
+    background: rgb(255 255 255 / 0.07) !important;
 }
 
-.emby-select-withcolor > option {
-    background: var(--v-glass-solid) !important;
-    color: var(--v-text) !important;
+.emby-select-withcolor > option,
+.emby-select > option {
+    background: var(--am-glass-solid) !important;
+    color: var(--am-text) !important;
 }
 
-.emby-checkbox:checked + span + .checkboxOutline,
-.emby-checkbox:checked + span::before,
-.MuiCheckbox-root.Mui-checked,
-.MuiSwitch-switchBase.Mui-checked {
-    color: var(--v-accent) !important;
-}
-.MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track {
-    background-color: var(--v-accent) !important;
+.selectArrowContainer {
+    color: var(--am-text-dim) !important;
 }
 
-/* ~~~~~~~~~~~~~~~~~~~~ DIALOGEN, MENU'S, POPOVERS ~~~~~~~~~~~~~~~~~~~~ */
-/* Deze liggen boven willekeurige inhoud: dus bijna ondoorzichtig houden voor leesbaarheid */
+.inputLabel,
+.selectLabel,
+.textareaLabel {
+    color: var(--am-text-dim) !important;
+}
+
+.inputLabelFocused,
+.selectLabelFocused,
+.textareaLabelFocused {
+    color: var(--am-accent) !important;
+}
+
+/* MUI invoervelden */
+.MuiOutlinedInput-root {
+    background: rgb(255 255 255 / 0.05) !important;
+    border-radius: 12px !important;
+}
+.MuiOutlinedInput-notchedOutline {
+    border-color: var(--am-border-hi) !important;
+}
+.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+    border-color: var(--am-accent) !important;
+}
+
+/* Checkboxen */
+.checkboxOutline {
+    border-radius: 6px !important;
+    border-color: rgb(255 255 255 / 0.3) !important;
+}
+.emby-checkbox:checked + span + .checkboxOutline {
+    background: var(--am-gradient) !important;
+    border-color: transparent !important;
+}
+
+/* Toggle switches */
+.mdl-switch__track {
+    background: rgb(255 255 255 / 0.18) !important;
+}
+.mdl-switch.is-checked .mdl-switch__track,
+.mdl-switch__input:checked + .mdl-switch__label + .mdl-switch__track {
+    background: rgb(var(--am-accent-rgb) / 0.55) !important;
+}
+.mdl-switch.is-checked .mdl-switch__thumb,
+.mdl-switch__input:checked ~ .mdl-switch__trackContainer .mdl-switch__thumb {
+    background: var(--am-accent) !important;
+}
+
+/* Sliders */
+.mdl-slider-background-lower,
+.MuiSlider-track {
+    background: var(--am-gradient) !important;
+    border: 0 !important;
+}
+.mdl-slider-background-upper,
+.MuiSlider-rail {
+    background: rgb(255 255 255 / 0.2) !important;
+}
+.mdl-slider::-webkit-slider-thumb {
+    background: #fff !important;
+    box-shadow: 0 0 0 4px rgb(var(--am-accent-rgb) / 0.35) !important;
+}
+.mdl-slider::-moz-range-thumb {
+    background: #fff !important;
+    border: 0 !important;
+}
+.MuiSlider-thumb {
+    color: #fff !important;
+    box-shadow: 0 0 0 4px rgb(var(--am-accent-rgb) / 0.35) !important;
+}
+
+/* Laad-spinners */
+.mdl-spinner__layer {
+    border-color: var(--am-accent) !important;
+}
+.MuiCircularProgress-root,
+.MuiLinearProgress-root {
+    color: var(--am-accent) !important;
+}
+
+
+/* =============================================================================
+   10. PANELEN, LIJSTEN & INSTELLINGEN
+   ============================================================================= */
+
+.paperList,
+.trackSelections,
+.readOnlyContent.paperList,
+.verticalSection.paperList {
+    background: var(--am-glass) !important;
+    border: 1px solid var(--am-border) !important;
+    border-radius: var(--am-radius-lg) !important;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+}
+
+.listItem {
+    border-radius: 12px !important;
+    transition: background var(--am-fast) !important;
+}
+
+.listItem-border {
+    border-color: var(--am-border) !important;
+}
+
+@media (hover: hover) {
+    .listItem:hover {
+        background: rgb(var(--am-accent-rgb) / 0.09) !important;
+    }
+}
+
+.listItemIcon:not(.listItemIcon-transparent) {
+    background: var(--am-gradient) !important;
+    color: #fff !important;
+}
+
+.listItemImageButton:hover {
+    background: rgb(var(--am-accent-rgb) / 0.2) !important;
+    color: var(--am-accent) !important;
+}
+
+/* Instellingenmenu (Mijn voorkeuren) */
+.userPreferencesPage .listItem,
+.content-primary .listItem {
+    padding-inline: 14px !important;
+}
+
+/* Lijstweergave (afleveringen, tracks) */
+.listItem.listItem-largeImage,
+#childrenContent .listItem {
+    background: var(--am-glass) !important;
+    border: 1px solid var(--am-border);
+    margin-bottom: 8px;
+    border-radius: var(--am-radius) !important;
+}
+
+#childrenContent .listItem:hover {
+    background: var(--am-glass-hover) !important;
+    border-color: rgb(var(--am-accent-rgb) / 0.3);
+}
+
+.listItemImage {
+    border-radius: 10px !important;
+}
+
+
+/* =============================================================================
+   11. DIALOGEN, MENU'S, POPOVERS
+   Deze liggen over willekeurige inhoud: bijna dicht voor leesbaarheid.
+   ============================================================================= */
+
 .dialog,
 .MuiDialog-paper,
 .MuiMenu-paper,
 .MuiPopover-paper.MuiPopover-paper,
-.MuiAccordion-root.MuiAccordion-root,
 .actionSheet,
-.actionSheetContent {
-    background: var(--v-glass-strong) !important;
-    backdrop-filter: blur(30px) saturate(1.4) !important;
-    -webkit-backdrop-filter: blur(30px) saturate(1.4) !important;
-    border: 1px solid var(--v-border) !important;
-    border-radius: var(--v-radius) !important;
-    box-shadow: var(--v-shadow) !important;
-    color: var(--v-text) !important;
+.MuiAccordion-root.MuiAccordion-root {
+    background: var(--am-glass-strong) !important;
+    backdrop-filter: blur(30px) saturate(1.6) !important;
+    -webkit-backdrop-filter: blur(30px) saturate(1.6) !important;
+    border: 1px solid var(--am-border-hi) !important;
+    box-shadow: 0 24px 60px rgb(0 0 0 / 0.55), inset 0 1px 0 rgb(255 255 255 / 0.06) !important;
+    color: var(--am-text) !important;
 }
-.dialogBackdrop,
-.MuiBackdrop-root {
-    background: rgb(5 3 10 / 0.6) !important;
+
+.dialog,
+.MuiDialog-paper,
+.actionSheet {
+    border-radius: var(--am-radius-lg) !important;
 }
+
+.MuiMenu-paper,
+.MuiPopover-paper.MuiPopover-paper {
+    border-radius: 16px !important;
+}
+
+/* Fullscreen dialogen (bv. metadata-editor op mobiel) niet afronden */
+.dialog-fullscreen {
+    border-radius: 0 !important;
+}
+
+.formDialogHeader {
+    background: transparent !important;
+    border-bottom: 1px solid var(--am-border);
+}
+
+.formDialogFooter {
+    background: transparent !important;
+    border-top: 1px solid var(--am-border);
+}
+
+.dialogBackdropOpened,
+.MuiBackdrop-root:not(.MuiBackdrop-invisible) {
+    background: rgb(4 2 9 / 0.62) !important;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+}
+
+.MuiMenuItem-root,
+.actionSheetMenuItem {
+    border-radius: 10px !important;
+    margin: 2px 6px !important;
+    transition: background var(--am-fast) !important;
+}
+
 .MuiMenuItem-root:hover,
-.actionSheetMenuItem:hover {
-    background: var(--v-accent-soft) !important;
+.actionSheetMenuItem:hover,
+.MuiMenuItem-root.Mui-focusVisible {
+    background: rgb(var(--am-accent-rgb) / 0.14) !important;
 }
 
-/* ~~~~~~~~~~~~~~~~~~~~ SLIDERS & VOORTGANG ~~~~~~~~~~~~~~~~~~~~ */
-.mdl-slider::-webkit-slider-thumb { background: var(--v-accent) !important; }
-.mdl-slider::-moz-range-thumb     { background: var(--v-accent) !important; }
-.mdl-slider-background-lower,
-.MuiSlider-track {
-    background: linear-gradient(90deg, var(--v-accent-3), var(--v-accent-2)) !important;
-}
-.MuiSlider-thumb { color: var(--v-accent) !important; }
-.MuiLinearProgress-bar,
-.mdl-spinner__layer {
-    background: var(--v-accent) !important;
-    border-color: var(--v-accent) !important;
+.MuiMenuItem-root.Mui-selected {
+    background: rgb(var(--am-accent-rgb) / 0.22) !important;
 }
 
-/* ~~~~~~~~~~~~~~~~~~~~ DETAILPAGINA ~~~~~~~~~~~~~~~~~~~~ */
-.detailRibbon {
-    background: transparent !important;
-}
-.detailPagePrimaryContainer,
-.detailPageSecondaryContainer {
-    background: transparent !important;
-}
-.detailImageContainer .card,
-.detailImageContainer .cardBox {
-    box-shadow: 0 20px 50px rgb(0 0 0 / 0.55), 0 0 0 1px var(--v-border);
-}
-.itemName.parentNameLast,
-.itemName {
-    font-weight: 700 !important;
-    letter-spacing: -.02em;
-}
-.mediaInfoItem,
-.mediaInfoText {
-    color: var(--v-text-dim) !important;
-}
-.mediaInfoOfficialRating,
-.mediaInfoItem.mediaInfoText {
-    border-radius: 6px !important;
-}
-
-/* ~~~~~~~~~~~~~~~~~~~~ SPELER ~~~~~~~~~~~~~~~~~~~~ */
-.videoOsdBottom,
-.nowPlayingBar {
-    background: var(--v-glass-strong) !important;
-    backdrop-filter: blur(var(--v-blur));
-    -webkit-backdrop-filter: blur(var(--v-blur));
-    border-top: 1px solid var(--v-border);
-}
-.osdControls .paper-icon-button-light:hover {
-    color: var(--v-accent) !important;
-}
-
-/* ~~~~~~~~~~~~~~~~~~~~ LOGINPAGINA ~~~~~~~~~~~~~~~~~~~~ */
-#loginPage .padded-left.padded-right.padded-bottom-page,
-#loginPage .readOnlyContent {
-    background: var(--v-glass) !important;
-    backdrop-filter: blur(var(--v-blur)) saturate(1.4);
-    -webkit-backdrop-filter: blur(var(--v-blur)) saturate(1.4);
-    border: 1px solid var(--v-border);
-    border-radius: 24px !important;
-    box-shadow: var(--v-shadow);
-    max-width: 28em !important;
-    margin: 0 auto !important;
-}
-
-/* ~~~~~~~~~~~~~~~~~~~~ KLEINE DETAILS ~~~~~~~~~~~~~~~~~~~~ */
-:focus-visible {
-    outline: 2px solid var(--v-accent) !important;
-    outline-offset: 2px;
+/* Meldingen (snackbar / toast) */
+.MuiSnackbarContent-root,
+.toast {
+    background: var(--am-glass-strong) !important;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--am-border-hi);
+    border-radius: 14px !important;
+    color: var(--am-text) !important;
 }
 
 .MuiChip-root {
-    background: var(--v-accent-soft) !important;
-    color: var(--v-text) !important;
+    background: rgb(var(--am-accent-rgb) / 0.16) !important;
+    color: var(--am-text) !important;
+    border: 1px solid rgb(var(--am-accent-rgb) / 0.25) !important;
 }
 
-.MuiAvatar-root {
-    box-shadow: 0 0 0 2px var(--v-border-glow);
+.MuiTooltip-tooltip {
+    background: var(--am-glass-strong) !important;
+    border: 1px solid var(--am-border-hi);
+    border-radius: 8px !important;
+    font-family: var(--am-font) !important;
 }
 
-/* Fallback voor browsers zonder backdrop-filter */
-@supports not (backdrop-filter: blur(1px)) {
-    .MuiAppBar-root, .MuiDrawer-paper, .dialog, .MuiMenu-paper, .MuiPopover-paper {
-        background: var(--v-glass-solid) !important;
+
+/* =============================================================================
+   12. DETAILPAGINA (film / serie / album)
+   ============================================================================= */
+
+/* Op de detailpagina mag de fanart meer zichtbaar zijn */
+/* Pagina's met fanart (detailpagina's): Jellyfin zet dan .withBackdrop op .backgroundContainer */
+body:has(.backgroundContainer.withBackdrop) .backdropImage {
+    opacity: 0.6 !important;
+    filter: saturate(1.05) brightness(.9);
+    transform: none;
+}
+
+/* Scrim: boven nog sfeer, vanaf de titel donker genoeg voor leesbare tekst - ook bij felle fanart */
+.backgroundContainer.withBackdrop {
+    background:
+        linear-gradient(180deg, rgb(8 5 15 / 0.2) 0%, rgb(8 5 15 / 0.5) 28%, rgb(8 5 15 / 0.86) 46%, rgb(8 5 15 / 0.96) 70%),
+        linear-gradient(90deg, rgb(8 5 15 / 0.6) 0%, rgb(8 5 15 / 0) 45%),
+        rgb(46 20 90 / 0.22) !important;
+}
+
+.itemDetailPage .detailSectionContent {
+    background: transparent !important;
+}
+
+.detailRibbon,
+.detailPagePrimaryContainer,
+.detailPageSecondaryContainer,
+.detailPageWrapperContainer,
+.noBackdropTransparency .detailPageSecondaryContainer {
+    background: transparent !important;
+}
+
+.itemDetailPage .itemName,
+.detailPagePrimaryContainer h1 {
+    font-weight: 800 !important;
+    letter-spacing: -0.03em !important;
+    text-shadow: 0 2px 20px rgb(0 0 0 / 0.5);
+}
+
+.itemDetailPage .parentName {
+    color: var(--am-text-dim) !important;
+    font-weight: 600;
+}
+
+.detailLogo {
+    filter: drop-shadow(0 6px 24px rgb(0 0 0 / 0.6));
+}
+
+/* Poster */
+.detailImageContainer .cardScalable {
+    border-radius: var(--am-radius-lg) !important;
+    box-shadow: 0 24px 60px rgb(0 0 0 / 0.6), 0 0 0 1px rgb(255 255 255 / 0.1) !important;
+}
+.detailImageContainer .cardImageContainer {
+    border-radius: var(--am-radius-lg) !important;
+}
+.itemDetailPage .card:hover .cardScalable {
+    transform: none;
+}
+
+/* Info-badges (jaar, duur, leeftijd) */
+.mediaInfoOfficialRating,
+.mediaInfoText {
+    border: 1px solid var(--am-border-hi) !important;
+    background: rgb(255 255 255 / 0.06) !important;
+    border-radius: 7px !important;
+    padding: .1em .55em !important;
+    color: var(--am-text) !important;
+}
+
+/* Lege badges zouden anders als los streepje zichtbaar zijn */
+.mediaInfoOfficialRating:empty,
+.mediaInfoText:empty {
+    display: none !important;
+}
+
+.mediaInfoCriticRating,
+.starRatingContainer {
+    color: var(--am-text) !important;
+}
+
+/* Knoppen naast de titel (play, trailer, bekeken, favoriet, meer) */
+.mainDetailButtons .detailButton,
+.detailButton {
+    background: var(--am-glass) !important;
+    border: 1px solid var(--am-border-hi) !important;
+    border-radius: 50% !important;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    color: var(--am-text) !important;
+    margin: 0 .3em !important;
+    transition: background var(--am-fast), border-color var(--am-fast), transform var(--am-fast) !important;
+}
+
+.mainDetailButtons .detailButton:hover {
+    background: rgb(var(--am-accent-rgb) / 0.22) !important;
+    border-color: rgb(var(--am-accent-rgb) / 0.5) !important;
+    transform: translateY(-1px);
+}
+
+.mainDetailButtons .btnPlay.detailButton,
+.mainDetailButtons .btnResume.detailButton {
+    background: var(--am-gradient) !important;
+    border-color: transparent !important;
+    color: #fff !important;
+    box-shadow: 0 8px 26px rgb(var(--am-accent-rgb) / 0.45) !important;
+}
+
+/* :not(.hide) - anders worden de knoppen die Jellyfin verbergt weer zichtbaar */
+.mainDetailButtons .detailButton:not(.hide) {
+    width: 2.9em !important;
+    height: 2.9em !important;
+    padding: 0 !important;
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+}
+
+.mainDetailButtons .detailButton .detailButton-content {
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.mainDetailButtons .detailButton .material-icons,
+.mainDetailButtons .detailButton .detailButton-icon {
+    font-size: 1.4em !important;
+}
+
+/* Favoriet / bekeken actief */
+.detailButton .material-icons.favorite.ratingbutton-icon-withrating,
+.ratingbutton-withrating,
+.playstatebutton-played,
+.playstatebutton-icon-played,
+.ratingbutton-icon-withrating {
+    color: var(--am-accent-2) !important;
+}
+
+/* Tagline / overzicht */
+.tagline {
+    font-weight: 600 !important;
+    color: var(--am-text) !important;
+}
+
+.overview-text,
+.detail-clamp-text {
+    color: var(--am-text-dim) !important;
+    line-height: 1.65 !important;
+}
+
+/* Labels (Director, Genres ...) en links */
+.itemDetailsGroup .label,
+.detailsGroupItem .label,
+.trackSelections .selectLabel {
+    color: var(--am-text-faint) !important;
+}
+
+.itemDetailsGroup a.button-link,
+.detailsGroupItem a.button-link,
+.itemTags a.button-link,
+.itemExternalLinks a.button-link {
+    color: #d8ccff !important;
+    font-weight: 500;
+}
+
+.itemDetailsGroup a.button-link:hover,
+.itemTags a.button-link:hover {
+    color: var(--am-accent-2) !important;
+}
+
+/* Video/Audio/Ondertitels selectie */
+.trackSelections {
+    padding: .6em 1em !important;
+}
+
+.trackSelections .selectContainer {
+    margin-bottom: .4em !important;
+}
+
+/* Secties op de detailpagina (Cast, Seasons ...) */
+.itemDetailPage .verticalSection .sectionTitle {
+    font-size: 1.25em !important;
+}
+
+/* Cast-kaarten: ronde foto's */
+#castContent .cardScalable,
+#castContent .cardImageContainer,
+#castContent .cardPadder {
+    border-radius: 50% !important;
+}
+
+/* Seizoenen / afleveringen lijst */
+.itemDetailPage .listItem.listItem-largeImage {
+    padding: .6em !important;
+}
+
+
+/* =============================================================================
+   13. ZOEKEN & FILTERS
+   ============================================================================= */
+
+.searchFields .inputContainer,
+.searchFieldsInner {
+    max-width: 50em;
+}
+
+.searchfields-txtSearch {
+    padding: .8em 1.2em .8em 2.6em !important;
+    font-size: 1.05em !important;
+    border-radius: 16px !important;
+}
+
+.alphaPickerButton {
+    border-radius: 8px !important;
+    color: var(--am-text-dim) !important;
+}
+.alphaPickerButton:hover,
+.alphaPickerButton-selected {
+    background: rgb(var(--am-accent-rgb) / 0.2) !important;
+    color: #fff !important;
+}
+
+/* Filter/sort-balk boven een bibliotheek */
+.flex.align-items-center.justify-content-center.flex-wrap-wrap.padded-top.padded-left.padded-right.padded-bottom.focuscontainer-x .btnFilter,
+.btnSort,
+.btnFilter,
+.btnShuffle,
+.btnSelectView,
+.btnPlay.autoSize {
+    border-radius: 12px !important;
+}
+
+.paging .btnPreviousPage,
+.paging .btnNextPage {
+    border-radius: 50% !important;
+}
+
+
+/* =============================================================================
+   14. SPELER (video OSD + nu-aan-het-spelen balk)
+   ============================================================================= */
+
+.videoOsdBottom {
+    background: linear-gradient(0deg, rgb(8 5 15 / 0.9) 0%, rgb(8 5 15 / 0.55) 55%, transparent 100%) !important;
+}
+
+.osdHeader,
+.skinHeader.osdHeader {
+    background: linear-gradient(180deg, rgb(8 5 15 / 0.75), transparent) !important;
+}
+
+.osdControls .paper-icon-button-light:hover:not(:disabled),
+.videoOsdBottom .paper-icon-button-light:hover:not(:disabled) {
+    color: var(--am-accent) !important;
+    background: rgb(var(--am-accent-rgb) / 0.15) !important;
+}
+
+.nowPlayingBar {
+    background: var(--am-glass-strong) !important;
+    backdrop-filter: blur(var(--am-blur)) saturate(1.6);
+    -webkit-backdrop-filter: blur(var(--am-blur)) saturate(1.6);
+    border-top: 1px solid var(--am-border-hi) !important;
+}
+
+.nowPlayingBarPositionContainer .mdl-slider-background-lower,
+.playbackProgress > div {
+    background: var(--am-gradient) !important;
+}
+
+.nowPlayingImage {
+    border-radius: 10px;
+}
+
+.upNextDialog {
+    background: var(--am-glass-strong) !important;
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
+    border-radius: var(--am-radius-lg) !important;
+    border: 1px solid var(--am-border-hi);
+}
+
+.upNextDialog-countdownText {
+    color: var(--am-accent) !important;
+}
+
+/* Muziek: nu aan het spelen pagina */
+.nowPlayingPage .nowPlayingPageImage {
+    border-radius: var(--am-radius-lg) !important;
+    box-shadow: 0 24px 60px rgb(0 0 0 / 0.6) !important;
+}
+
+.playlist .listItem.playlistIndexIndicatorImage,
+.listItem.playlistIndexIndicatorImage {
+    background: rgb(var(--am-accent-rgb) / 0.15) !important;
+}
+
+
+/* =============================================================================
+   15. LOGINPAGINA
+   ============================================================================= */
+
+#loginPage .padded-left.padded-right.padded-bottom-page,
+.loginPage .padded-left.padded-right.padded-bottom-page {
+    max-width: 26em !important;
+    margin: 6vh auto 0 !important;
+    padding: 2.2em 2.2em 1.6em !important;
+    background: rgb(22 14 40 / 0.5) !important;
+    backdrop-filter: blur(30px) saturate(1.6);
+    -webkit-backdrop-filter: blur(30px) saturate(1.6);
+    border: 1px solid var(--am-border-hi);
+    border-radius: 28px !important;
+    box-shadow: 0 30px 80px rgb(0 0 0 / 0.55), inset 0 1px 0 rgb(255 255 255 / 0.08);
+}
+
+#loginPage h1,
+.loginPage h1 {
+    text-align: center;
+    font-weight: 800 !important;
+    font-size: 1.9em !important;
+    margin-bottom: .2em !important;
+}
+
+/* "Please sign in" / disclaimer */
+#loginPage .loginDisclaimer,
+.loginDisclaimerContainer {
+    color: var(--am-text-faint) !important;
+    text-align: center;
+}
+
+#loginPage .button-submit {
+    width: 100% !important;
+    padding: .85em !important;
+    font-size: 1em !important;
+    margin-top: 1em !important;
+}
+
+#loginPage .raised:not(.button-submit) {
+    width: 100% !important;
+}
+
+/* Gebruikerstegels (als publieke gebruikers aan staan) */
+#loginPage .card .cardScalable {
+    border-radius: 50% !important;
+}
+
+
+/* =============================================================================
+   16. MUZIEK, LIVE TV, OVERIG
+   ============================================================================= */
+
+.guide-channelHeaderCell,
+.programCell {
+    border-color: var(--am-border) !important;
+}
+
+.programCell:hover,
+.guide-channelHeaderCell:hover {
+    background: rgb(var(--am-accent-rgb) / 0.12) !important;
+}
+
+.guide-date-tab-button.emby-tab-button-active {
+    color: var(--am-accent) !important;
+}
+
+.buttonActive {
+    color: var(--am-accent) !important;
+}
+
+/* Lege/fout meldingen */
+.noItemsMessage {
+    color: var(--am-text-dim) !important;
+}
+
+
+/* =============================================================================
+   17. FALLBACKS & TOEGANKELIJKHEID
+   ============================================================================= */
+
+/* Browsers zonder backdrop-filter: dichte achtergrond, anders onleesbaar */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    .MuiAppBar-root,
+    .MuiDrawer-paper,
+    .dialog,
+    .MuiMenu-paper,
+    .MuiPopover-paper,
+    .nowPlayingBar {
+        background: var(--am-glass-solid) !important;
     }
 }
 
-/* ~~~~~~~~~~~~~~~~~~~~ MOBIEL ~~~~~~~~~~~~~~~~~~~~ */
-@media (max-width: 600px) {
+/* Minder beweging als het systeem daarom vraagt */
+@media (prefers-reduced-motion: reduce) {
+    .backdropContainer::before { animation: none; }
+    .card:hover .cardScalable { transform: none; }
+}
+
+
+/* =============================================================================
+   18. MOBIEL & TV
+   ============================================================================= */
+
+@media (max-width: 800px) {
     :root {
-        --v-blur: 14px;
-        --v-radius: 12px;
+        --am-header-gap: 0px;
+        --am-blur: 16px;
+        --am-radius: 12px;
     }
-    .MuiDrawer-paper.MuiDrawer-paper { border-radius: 0 20px 20px 0 !important; }
+
+    .MuiAppBar-root.MuiAppBar-positionFixed {
+        left: 0 !important;
+        right: 0 !important;
+        border-radius: 0 0 18px 18px !important;
+        border-top: 0 !important;
+    }
+
+    .sectionTitle,
+    .sectionTitle-cards {
+        font-size: 1.15em !important;
+    }
+
+    #loginPage .padded-left.padded-right.padded-bottom-page {
+        margin: 3vh 1em 0 !important;
+        padding: 1.6em 1.3em 1.2em !important;
+    }
+
+    .MuiDrawer-paper.MuiDrawer-paper {
+        border-radius: 0 20px 20px 0 !important;
+    }
+
+    /* Detailknoppen passen anders niet op een telefoonscherm */
+    .mainDetailButtons .detailButton:not(.hide) {
+        width: 2.5em !important;
+        height: 2.5em !important;
+        margin: 0 .15em !important;
+    }
+    .mainDetailButtons .detailButton .material-icons,
+    .mainDetailButtons .detailButton .detailButton-icon {
+        font-size: 1.2em !important;
+    }
+}
+
+/* TV-layout: geen zwevende balk en geen hover-lift */
+.layout-tv .MuiAppBar-root.MuiAppBar-positionFixed {
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    border-radius: 0 !important;
+}
+.layout-tv .card:hover .cardScalable {
+    transform: none;
 }
