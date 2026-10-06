@@ -46,8 +46,25 @@ body {
 
 /* Backdrop-afbeelding van een item: gedimd, zodat de gradient er nog doorheen komt */
 .backdropContainer .backdropImage {
-    opacity: .35 !important;
-    filter: saturate(1.1) blur(2px);
+    opacity: .10 !important;
+    filter: saturate(1.2) blur(28px) brightness(.8);
+    transform: scale(1.1); /* verbergt de lichte rand die blur aan de randen geeft */
+}
+
+/* Zelfde gradient bovenop de backdrop, zodat de achtergrond overal egaal paars is */
+.backdropContainer {
+    background: var(--v-bg-gradient) !important;
+}
+
+/* Het homescherm en tabbladen tekenen soms een eigen laag: transparant maken, geen harde rand */
+.libraryDocument .backgroundContainer,
+.libraryDocument.withSectionTabs .backgroundContainer,
+.pageTabContent,
+.homePage,
+.homeSectionsContainer {
+    background: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
 }
 
 /* Verberg scrollbalken */
@@ -271,6 +288,23 @@ a, .button-link, .emby-button.button-link {
 .MuiButton-outlined:hover {
     background: var(--v-accent-soft) !important;
     border-color: var(--v-border-glow) !important;
+}
+
+/* Titel-links boven rijen ("Recently Added in ...") zijn ook emby-buttons: geen vak eromheen */
+.sectionTitleTextButton,
+.sectionTitleContainer .emby-button,
+.sectionTitleContainer a,
+.sectionTitleButton,
+.sectionTitleContainer .paper-icon-button-light {
+    background: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+.sectionTitleTextButton:hover,
+.sectionTitleContainer .emby-button:hover {
+    color: var(--v-accent) !important;
 }
 
 /* ~~~~~~~~~~~~~~~~~~~~ FORMULIEREN ~~~~~~~~~~~~~~~~~~~~ */
