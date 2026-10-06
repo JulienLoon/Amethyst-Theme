@@ -191,14 +191,35 @@ body,
     gap: 2px;
 }
 
+/* Navigatie (logo + bibliotheken): nooit afbreken; bij te weinig ruimte horizontaal scrollen */
+.MuiAppBar-root .MuiToolbar-root > .MuiStack-root {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+    mask-image: linear-gradient(90deg, #000 calc(100% - 14px), transparent);
+    -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 14px), transparent);
+}
+
+.MuiAppBar-root .MuiToolbar-root > .MuiStack-root::-webkit-scrollbar {
+    display: none;
+}
+
+.MuiAppBar-root .MuiToolbar-root > .MuiBox-root {
+    flex-shrink: 0;
+}
+
 /* Nav-knoppen in de balk */
 .MuiAppBar-root .MuiButton-root {
+    white-space: nowrap !important;
+    flex-shrink: 0;
     text-transform: none !important;
     font-weight: 500 !important;
     letter-spacing: 0 !important;
     color: var(--am-text-dim) !important;
     border-radius: 11px !important;
-    padding: 5px 12px !important;
+    padding: 5px 10px !important;
+    min-width: 0 !important;
     transition: background var(--am-fast), color var(--am-fast) !important;
 }
 
@@ -1173,6 +1194,127 @@ body:has(.backgroundContainer.withBackdrop) .backdropImage {
     box-shadow: inset 0 0 0 1px rgb(var(--am-accent-rgb) / 0.45);
 }
 
+/* ---- Echte zoekbalk (js/navbar-search.js via JavaScript Injector) ---- */
+.am-navsearch {
+    display: none;
+}
+
+.am-js-navsearch .am-navsearch {
+    position: relative;
+    display: flex;
+    align-items: center;
+    align-self: center;
+    width: var(--am-navsearch-width, 240px);
+    height: 38px;
+    margin: 0 8px;
+    border-radius: 12px;
+    background: rgb(255 255 255 / 0.06);
+    box-shadow: inset 0 0 0 1px var(--am-border-hi);
+    transition: width var(--am-slow), background var(--am-fast), box-shadow var(--am-fast);
+}
+
+.am-js-navsearch .am-navsearch:hover {
+    background: rgb(var(--am-accent-rgb) / 0.10);
+}
+
+.am-js-navsearch .am-navsearch:focus-within {
+    width: var(--am-navsearch-width-open, 320px);
+    background: rgb(22 14 40 / 0.85);
+    box-shadow: inset 0 0 0 1px rgb(var(--am-accent-rgb) / 0.8), 0 0 0 4px rgb(var(--am-accent-rgb) / 0.16);
+}
+
+.am-navsearch-icon {
+    position: absolute;
+    left: 12px;
+    font-size: 20px !important;
+    color: var(--am-text-faint);
+    pointer-events: none;
+    transition: color var(--am-fast);
+}
+
+.am-navsearch:focus-within .am-navsearch-icon,
+.am-on-search .am-navsearch-icon {
+    color: var(--am-accent);
+}
+
+.am-navsearch-input {
+    width: 100%;
+    height: 100%;
+    padding: 0 34px 0 40px;
+    border: 0 !important;
+    outline: 0 !important;
+    background: transparent !important;
+    color: var(--am-text) !important;
+    font: 500 .9rem var(--am-font) !important;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.am-navsearch-input::placeholder {
+    color: var(--am-text-faint);
+}
+
+.am-navsearch-input::-webkit-search-cancel-button {
+    display: none;
+}
+
+.am-navsearch-input:focus-visible {
+    outline: 0 !important;
+}
+
+.am-navsearch-kbd {
+    position: absolute;
+    right: 10px;
+    padding: 1px 7px;
+    border-radius: 6px;
+    border: 1px solid var(--am-border-hi);
+    font: 600 .72rem var(--am-font);
+    color: var(--am-text-faint);
+    pointer-events: none;
+}
+
+.am-navsearch-clear {
+    position: absolute;
+    right: 6px;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    padding: 0;
+    border: 0;
+    border-radius: 8px;
+    background: transparent;
+    color: var(--am-text-dim);
+    cursor: pointer;
+}
+
+.am-navsearch-clear .material-icons {
+    font-size: 18px;
+}
+
+.am-navsearch-clear:hover {
+    background: rgb(var(--am-accent-rgb) / 0.2);
+    color: #fff;
+}
+
+.am-navsearch.has-value .am-navsearch-clear { display: flex; }
+.am-navsearch.has-value .am-navsearch-kbd,
+.am-navsearch:focus-within .am-navsearch-kbd { display: none; }
+
+/* Met script: de CSS-zoekknop en het paginaveld zijn niet meer nodig op desktop */
+.am-js-navsearch .MuiAppBar-root a[aria-label="Search"] {
+    display: none !important;
+}
+
+.am-js-navsearch #searchPage .searchFields {
+    display: none !important;
+}
+
+.am-js-navsearch #searchPage .searchSuggestions {
+    padding-top: 2.5em;
+}
+
 /* ---- Zoekpagina ---- */
 #searchPage .searchFields {
     padding-top: 3.5em !important;
@@ -1510,6 +1652,17 @@ body:has(.backgroundContainer.withBackdrop) .backdropImage {
     }
     .MuiAppBar-root a[aria-label="Search"]::after {
         content: none;
+    }
+
+    /* Mobiel: geen ruimte voor het veld, dus terug naar icoon + paginaveld */
+    .am-js-navsearch .am-navsearch {
+        display: none;
+    }
+    .am-js-navsearch .MuiAppBar-root a[aria-label="Search"] {
+        display: inline-flex !important;
+    }
+    .am-js-navsearch #searchPage .searchFields {
+        display: block !important;
     }
 
     #searchPage .searchFields {
