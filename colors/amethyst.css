@@ -36,6 +36,7 @@
     --am-glass-hover:  rgb(44 30 76 / 0.55);
     --am-glass-strong: rgb(20 13 36 / 0.86);
     --am-glass-solid:  #150e26;
+    --am-glass-bar:    rgb(22 14 40 / 0.55); /* header, loginkaart */
     --am-border:       rgb(255 255 255 / 0.08);
     --am-border-hi:    rgb(255 255 255 / 0.14);
     --am-shadow:       0 10px 40px rgb(0 0 0 / 0.45);
@@ -57,6 +58,14 @@
     --jf-palette-secondary-lightChannel: 216 180 254;
     --jf-palette-secondary-darkChannel: 147 51 234;
     --jf-palette-secondary-contrastTextChannel: 255 255 255;
+    /* "info" is standaard lichtblauw (o.a. activiteit-iconen op het dashboard) */
+    --jf-palette-info-main: #818cf8;
+    --jf-palette-info-light: #a5b4fc;
+    --jf-palette-info-dark: #6366f1;
+    --jf-palette-info-contrastText: #ffffff;
+    --jf-palette-info-mainChannel: 129 140 248;
+    --jf-palette-info-lightChannel: 165 180 252;
+    --jf-palette-info-darkChannel: 99 102 241;
     --jf-palette-background-default: #08050f;
     --jf-palette-background-paper: #150e26;
     --jf-palette-background-defaultChannel: 8 5 15;

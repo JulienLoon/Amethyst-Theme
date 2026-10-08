@@ -1,7 +1,7 @@
 /*
   Amethyst-Theme - echte zoekbalk in de navbar (Jellyfin 12)
 
-  Laden via de JavaScript Injector-plugin:
+  Wordt normaal geladen door js/amethyst.js. Los laden kan ook via de JavaScript Injector-plugin:
     (function () {
         var s = document.createElement('script');
         s.src = 'https://cdn.jsdelivr.net/gh/JulienLoon/Amethyst-Theme@main/js/navbar-search.js';

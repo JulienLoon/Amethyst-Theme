@@ -1,0 +1,32 @@
+/*
+  Amethyst-Theme - lite-modus
+  Geen blur, geen bewegende aurora en dichtere panelen. Voor tv's, oude
+  tablets en goedkope telefoons, waar backdrop-filter traag is.
+
+  Aanzetten: deze regel ONDER de import van theme.css in Custom CSS zetten
+  @import url("https://cdn.jsdelivr.net/gh/JulienLoon/Amethyst-Theme@main/lite.css");
+
+  Gaat ook automatisch aan bij de tv-layout van Jellyfin en als het systeem
+  om minder transparantie vraagt (prefers-reduced-transparency).
+  De !important is nodig: theme.css zet deze variabelen na het importeren opnieuw.
+*/
+:root {
+    --am-backdrop: none !important;
+    --am-backdrop-strong: none !important;
+    --am-backdrop-soft: none !important;
+    --am-backdrop-veil: none !important;
+    --am-aurora-motion: none !important;
+    --am-glass: rgb(30 20 52 / 0.72) !important;
+    --am-glass-hover: rgb(44 30 76 / 0.82) !important;
+    --am-glass-strong: var(--am-glass-solid) !important;
+    --am-glass-bar: rgb(22 14 40 / 0.94) !important;
+}
+
+/* De wazige fanart-laag is ook een dure filter */
+.backdropImage {
+    filter: none !important;
+}
+
+.backdropContainer::before {
+    will-change: auto !important;
+}

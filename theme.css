@@ -9,7 +9,9 @@
 */
 
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
-@import url("https://cdn.jsdelivr.net/gh/JulienLoon/Amethyst-Theme@main/colors/amethyst.css");
+@import url("colors/amethyst.css");
+/* Lite-modus automatisch als het systeem om minder transparantie vraagt */
+@import url("lite.css") (prefers-reduced-transparency: reduce);
 
 :root {
     --am-font: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
@@ -17,6 +19,12 @@
     --am-radius: 14px;
     --am-radius-sm: 10px;
     --am-blur: 24px;
+    /* Glas-effecten; lite.css zet deze op none */
+    --am-backdrop: blur(var(--am-blur)) saturate(1.6);
+    --am-backdrop-strong: blur(30px) saturate(1.6);
+    --am-backdrop-soft: blur(14px);
+    --am-backdrop-veil: blur(4px);
+    --am-aurora-motion: am-aurora 38s ease-in-out infinite alternate;
     --am-ease: cubic-bezier(.2, .7, .2, 1);
     --am-fast: .18s var(--am-ease);
     --am-slow: .35s var(--am-ease);
@@ -130,7 +138,7 @@ body,
     position: absolute;
     inset: -15%;
     background: var(--am-aurora);
-    animation: am-aurora 38s ease-in-out infinite alternate;
+    animation: var(--am-aurora-motion);
     will-change: transform;
     pointer-events: none;
 }
@@ -179,9 +187,9 @@ body,
     right: 14px !important;
     width: auto !important;
     border-radius: 18px !important;
-    background: rgb(22 14 40 / 0.55) !important;
-    backdrop-filter: blur(var(--am-blur)) saturate(1.6) !important;
-    -webkit-backdrop-filter: blur(var(--am-blur)) saturate(1.6) !important;
+    background: var(--am-glass-bar) !important;
+    backdrop-filter: var(--am-backdrop) !important;
+    -webkit-backdrop-filter: var(--am-backdrop) !important;
     border: 1px solid var(--am-border) !important;
     box-shadow: 0 8px 30px rgb(0 0 0 / 0.35), inset 0 1px 0 rgb(255 255 255 / 0.06) !important;
     color: var(--am-text) !important;
@@ -297,9 +305,9 @@ body,
 
 .skinHeader.semiTransparent,
 .skinHeader-withBackground {
-    background: rgb(22 14 40 / 0.55) !important;
-    backdrop-filter: blur(var(--am-blur)) saturate(1.6);
-    -webkit-backdrop-filter: blur(var(--am-blur)) saturate(1.6);
+    background: var(--am-glass-bar) !important;
+    backdrop-filter: var(--am-backdrop);
+    -webkit-backdrop-filter: var(--am-backdrop);
 }
 
 
@@ -353,8 +361,8 @@ body,
 .MuiDrawer-paper.MuiDrawer-paper,
 .mainDrawer {
     background: var(--am-glass-strong) !important;
-    backdrop-filter: blur(30px) saturate(1.6) !important;
-    -webkit-backdrop-filter: blur(30px) saturate(1.6) !important;
+    backdrop-filter: var(--am-backdrop-strong) !important;
+    -webkit-backdrop-filter: var(--am-backdrop-strong) !important;
     border: 0 !important;
     border-right: 1px solid var(--am-border) !important;
     border-radius: 0 24px 24px 0 !important;
@@ -446,8 +454,8 @@ body,
     width: 34px !important;
     height: 34px !important;
     margin-left: 6px !important;
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: var(--am-backdrop-soft);
+    -webkit-backdrop-filter: var(--am-backdrop-soft);
     transition: background var(--am-fast), border-color var(--am-fast) !important;
 }
 
@@ -796,8 +804,8 @@ body,
     background: var(--am-glass) !important;
     border: 1px solid var(--am-border) !important;
     border-radius: var(--am-radius-lg) !important;
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: var(--am-backdrop-soft);
+    -webkit-backdrop-filter: var(--am-backdrop-soft);
 }
 
 .listItem {
@@ -862,8 +870,8 @@ body,
 .actionSheet,
 .MuiAccordion-root.MuiAccordion-root {
     background: var(--am-glass-strong) !important;
-    backdrop-filter: blur(30px) saturate(1.6) !important;
-    -webkit-backdrop-filter: blur(30px) saturate(1.6) !important;
+    backdrop-filter: var(--am-backdrop-strong) !important;
+    -webkit-backdrop-filter: var(--am-backdrop-strong) !important;
     border: 1px solid var(--am-border-hi) !important;
     box-shadow: 0 24px 60px rgb(0 0 0 / 0.55), inset 0 1px 0 rgb(255 255 255 / 0.06) !important;
     color: var(--am-text) !important;
@@ -898,8 +906,8 @@ body,
 .dialogBackdropOpened,
 .MuiBackdrop-root:not(.MuiBackdrop-invisible) {
     background: rgb(4 2 9 / 0.62) !important;
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: var(--am-backdrop-veil);
+    -webkit-backdrop-filter: var(--am-backdrop-veil);
 }
 
 .MuiMenuItem-root,
@@ -923,8 +931,8 @@ body,
 .MuiSnackbarContent-root,
 .toast {
     background: var(--am-glass-strong) !important;
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: var(--am-backdrop);
+    -webkit-backdrop-filter: var(--am-backdrop);
     border: 1px solid var(--am-border-hi);
     border-radius: 14px !important;
     color: var(--am-text) !important;
@@ -1031,8 +1039,8 @@ body:has(.backgroundContainer.withBackdrop) .backdropImage {
     background: var(--am-glass) !important;
     border: 1px solid var(--am-border-hi) !important;
     border-radius: 50% !important;
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: var(--am-backdrop-soft);
+    -webkit-backdrop-filter: var(--am-backdrop-soft);
     color: var(--am-text) !important;
     margin: 0 .3em !important;
     transition: background var(--am-fast), border-color var(--am-fast), transform var(--am-fast) !important;
@@ -1355,8 +1363,8 @@ body:has(.backgroundContainer.withBackdrop) .backdropImage {
     font-weight: 500 !important;
     border-radius: 20px !important;
     background: var(--am-glass) !important;
-    backdrop-filter: blur(20px) saturate(1.5);
-    -webkit-backdrop-filter: blur(20px) saturate(1.5);
+    backdrop-filter: var(--am-backdrop);
+    -webkit-backdrop-filter: var(--am-backdrop);
     border: 1px solid var(--am-border-hi) !important;
     box-shadow: 0 12px 40px rgb(0 0 0 / 0.35), inset 0 1px 0 rgb(255 255 255 / 0.06) !important;
 }
@@ -1405,8 +1413,8 @@ body:has(.backgroundContainer.withBackdrop) .backdropImage {
     border-radius: 999px !important;
     background: var(--am-glass) !important;
     border: 1px solid var(--am-border-hi);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: var(--am-backdrop-soft);
+    -webkit-backdrop-filter: var(--am-backdrop-soft);
     color: var(--am-text) !important;
     font-weight: 500 !important;
     font-size: .95em;
@@ -1479,8 +1487,8 @@ body:has(.backgroundContainer.withBackdrop) .backdropImage {
 
 .nowPlayingBar {
     background: var(--am-glass-strong) !important;
-    backdrop-filter: blur(var(--am-blur)) saturate(1.6);
-    -webkit-backdrop-filter: blur(var(--am-blur)) saturate(1.6);
+    backdrop-filter: var(--am-backdrop);
+    -webkit-backdrop-filter: var(--am-backdrop);
     border-top: 1px solid var(--am-border-hi) !important;
 }
 
@@ -1495,8 +1503,8 @@ body:has(.backgroundContainer.withBackdrop) .backdropImage {
 
 .upNextDialog {
     background: var(--am-glass-strong) !important;
-    backdrop-filter: blur(30px);
-    -webkit-backdrop-filter: blur(30px);
+    backdrop-filter: var(--am-backdrop-strong);
+    -webkit-backdrop-filter: var(--am-backdrop-strong);
     border-radius: var(--am-radius-lg) !important;
     border: 1px solid var(--am-border-hi);
 }
@@ -1526,9 +1534,9 @@ body:has(.backgroundContainer.withBackdrop) .backdropImage {
     max-width: 26em !important;
     margin: 6vh auto 0 !important;
     padding: 2.2em 2.2em 1.6em !important;
-    background: rgb(22 14 40 / 0.5) !important;
-    backdrop-filter: blur(30px) saturate(1.6);
-    -webkit-backdrop-filter: blur(30px) saturate(1.6);
+    background: var(--am-glass-bar) !important;
+    backdrop-filter: var(--am-backdrop-strong);
+    -webkit-backdrop-filter: var(--am-backdrop-strong);
     border: 1px solid var(--am-border-hi);
     border-radius: 28px !important;
     box-shadow: 0 30px 80px rgb(0 0 0 / 0.55), inset 0 1px 0 rgb(255 255 255 / 0.08);
@@ -1540,6 +1548,18 @@ body:has(.backgroundContainer.withBackdrop) .backdropImage {
     font-weight: 800 !important;
     font-size: 1.9em !important;
     margin-bottom: .2em !important;
+}
+
+/* Logo boven de titel (pad is relatief aan theme.css) */
+#loginPage h1::before,
+.loginPage h1::before {
+    content: "";
+    display: block;
+    width: 88px;
+    height: 88px;
+    margin: 0 auto .45em;
+    background: url("logos/amethyst-logo-320.png") center / contain no-repeat;
+    filter: drop-shadow(0 10px 28px rgb(var(--am-accent-rgb) / 0.45));
 }
 
 /* "Please sign in" / disclaimer */
@@ -1699,6 +1719,24 @@ body:has(.backgroundContainer.withBackdrop) .backdropImage {
     }
 }
 
+/* TV-layout en .am-lite (via js/amethyst.js): zelfde als lite.css - tv-browsers zijn traag met blur */
+html.layout-tv,
+html.am-lite {
+    --am-backdrop: none !important;
+    --am-backdrop-strong: none !important;
+    --am-backdrop-soft: none !important;
+    --am-backdrop-veil: none !important;
+    --am-aurora-motion: none !important;
+    --am-glass: rgb(30 20 52 / 0.72) !important;
+    --am-glass-hover: rgb(44 30 76 / 0.82) !important;
+    --am-glass-strong: var(--am-glass-solid) !important;
+    --am-glass-bar: rgb(22 14 40 / 0.94) !important;
+}
+.layout-tv .backdropImage,
+.am-lite .backdropImage {
+    filter: none !important;
+}
+
 /* TV-layout: geen zwevende balk en geen hover-lift */
 .layout-tv .MuiAppBar-root.MuiAppBar-positionFixed {
     top: 0 !important;
@@ -1708,4 +1746,456 @@ body:has(.backgroundContainer.withBackdrop) .backdropImage {
 }
 .layout-tv .card:hover .cardScalable {
     transform: none;
+}
+
+
+/* =============================================================================
+   19. DASHBOARD (beheer)
+   Jellyfin laadt de Custom CSS niet op het dashboard; js/amethyst.js voegt
+   theme.css daar zelf toe. Alles is gescoped op <main>, dialogen staan erbuiten.
+   ============================================================================= */
+
+main .MuiPaper-root:not(.MuiAppBar-root):not(.MuiDrawer-paper) {
+    background-color: var(--am-glass) !important;
+    background-image: none !important;
+    border: 1px solid var(--am-border);
+    border-radius: var(--am-radius-lg) !important;
+    box-shadow: 0 10px 30px rgb(0 0 0 / 0.25) !important;
+    backdrop-filter: var(--am-backdrop-soft);
+    -webkit-backdrop-filter: var(--am-backdrop-soft);
+}
+
+/* Geen glas-op-glas: geneste panelen (tabellen, toolbars) doorzichtig */
+main .MuiPaper-root .MuiPaper-root,
+main .MuiPaper-root .MuiBox-root,
+main .MuiTableContainer-root,
+main .MuiTable-root,
+main .MuiTableHead-root,
+main .MuiTableBody-root,
+main .MuiTableRow-root,
+main .MuiTableCell-root {
+    background-color: transparent !important;
+    box-shadow: none !important;
+}
+
+main .MuiPaper-root .MuiPaper-root {
+    border: 0;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+}
+
+main .MuiTableCell-root {
+    border-color: var(--am-border) !important;
+}
+
+main .MuiTableCell-head {
+    color: var(--am-text-dim) !important;
+    font-weight: 600 !important;
+}
+
+main .MuiTableBody-root .MuiTableRow-root:hover > .MuiTableCell-root {
+    background-color: rgb(var(--am-accent-rgb) / 0.08) !important;
+}
+
+main .MuiTableRow-root.Mui-selected > .MuiTableCell-root {
+    background-color: rgb(var(--am-accent-rgb) / 0.16) !important;
+}
+
+/* Filterknoppen (All / User / System) */
+.MuiToggleButtonGroup-root {
+    border-radius: 10px !important;
+    background: rgb(255 255 255 / 0.04);
+}
+
+.MuiToggleButton-root {
+    text-transform: none !important;
+    color: var(--am-text-dim) !important;
+    border-color: var(--am-border-hi) !important;
+}
+
+.MuiToggleButton-root.Mui-selected {
+    background: rgb(var(--am-accent-rgb) / 0.22) !important;
+    color: #fff !important;
+}
+
+main .MuiAlert-root {
+    border-radius: var(--am-radius) !important;
+    border: 1px solid var(--am-border-hi);
+}
+
+/* Schijfruimte e.d. */
+.MuiLinearProgress-root {
+    height: 6px !important;
+    border-radius: 6px;
+    background-color: rgb(255 255 255 / 0.1) !important;
+}
+
+.MuiLinearProgress-bar {
+    border-radius: 6px;
+}
+
+.MuiLinearProgress-barColorPrimary {
+    background: var(--am-gradient) !important;
+}
+
+/* Apparaat-/sessiekaarten */
+main .MuiCard-root {
+    overflow: hidden;
+}
+
+main .MuiCardActions-root {
+    border-top: 1px solid var(--am-border);
+}
+
+
+/* =============================================================================
+   20. SPOTLIGHT (js/spotlight.js) - grote banner bovenaan de homepage
+   ============================================================================= */
+
+.am-spotlight {
+    position: relative;
+    isolation: isolate;
+    height: clamp(360px, 58vh, 640px);
+    margin: .4em 3.3% 1.6em;
+    border-radius: 28px;
+    overflow: hidden;
+    background: var(--am-glass-solid);
+    border: 1px solid var(--am-border-hi);
+    box-shadow: 0 30px 70px rgb(0 0 0 / 0.5), 0 0 0 1px rgb(var(--am-accent-rgb) / 0.08);
+    touch-action: pan-y;
+}
+
+.am-spotlight-slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .9s var(--am-ease), visibility .9s;
+}
+
+.am-spotlight-slide.is-active {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Langzaam uitzoomen op de actieve titel */
+.am-spotlight-bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 20%;
+    transform: scale(1.08);
+    transition: transform 10s linear;
+}
+
+.am-spotlight-slide.is-active .am-spotlight-bg {
+    transform: scale(1);
+}
+
+/* Scrim: links en onder donker voor de tekst, rechtsboven de fanart vrij */
+.am-spotlight-slide::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(90deg, rgb(8 5 15 / 0.92) 0%, rgb(8 5 15 / 0.62) 36%, rgb(8 5 15 / 0) 68%),
+        linear-gradient(0deg, rgb(8 5 15 / 0.9) 0%, rgb(8 5 15 / 0) 50%),
+        linear-gradient(120deg, rgb(var(--am-accent-rgb) / 0.18), transparent 60%);
+    pointer-events: none;
+}
+
+.am-spotlight-content {
+    position: absolute;
+    z-index: 1;
+    left: clamp(22px, 4vw, 60px);
+    bottom: clamp(26px, 6vh, 60px);
+    max-width: min(560px, 80%);
+}
+
+.am-spotlight-eyebrow {
+    display: inline-block;
+    margin-bottom: 14px;
+    padding: 4px 11px;
+    border-radius: 999px;
+    background: rgb(var(--am-accent-rgb) / 0.18);
+    border: 1px solid rgb(var(--am-accent-rgb) / 0.4);
+    color: #e9e0ff;
+    font-size: .72rem;
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+}
+
+.am-spotlight-logo {
+    display: block;
+    max-width: min(400px, 75%);
+    max-height: 130px;
+    margin-bottom: 16px;
+    object-fit: contain;
+    object-position: left bottom;
+    filter: drop-shadow(0 6px 24px rgb(0 0 0 / 0.6));
+}
+
+.am-spotlight-title {
+    margin: 0 0 .3em;
+    font-size: clamp(1.9em, 3.4vw, 3.1em);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+    text-shadow: 0 2px 20px rgb(0 0 0 / 0.5);
+}
+
+.am-spotlight-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px 14px;
+    margin-bottom: .85em;
+    color: var(--am-text-dim);
+    font-size: .92em;
+    font-weight: 500;
+}
+
+.am-spotlight-rating {
+    padding: .05em .5em;
+    border: 1px solid var(--am-border-hi);
+    border-radius: 6px;
+    color: var(--am-text);
+}
+
+.am-spotlight-star {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    color: var(--am-text);
+}
+
+.am-spotlight-star .material-icons {
+    font-size: 1.1em;
+    color: #fbbf24;
+}
+
+.am-spotlight-overview {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    margin: 0 0 1.4em;
+    color: var(--am-text-dim);
+    line-height: 1.6;
+}
+
+.am-spotlight-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.am-spotlight-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    height: 46px;
+    padding: 0 22px 0 16px;
+    border: 0;
+    border-radius: 14px;
+    font: 600 1rem var(--am-font);
+    cursor: pointer;
+    transition: filter var(--am-fast), background var(--am-fast), box-shadow var(--am-fast), transform var(--am-fast);
+}
+
+.am-spotlight-btn .material-icons {
+    font-size: 1.5em;
+}
+
+.am-spotlight-play {
+    background: var(--am-gradient);
+    color: #fff;
+    box-shadow: 0 8px 26px rgb(var(--am-accent-rgb) / 0.45), inset 0 1px 0 rgb(255 255 255 / 0.2);
+}
+
+.am-spotlight-play:hover {
+    filter: brightness(1.1) saturate(1.1);
+    transform: translateY(-1px);
+}
+
+.am-spotlight-info {
+    background: rgb(255 255 255 / 0.1);
+    color: var(--am-text);
+    box-shadow: inset 0 0 0 1px var(--am-border-hi);
+    backdrop-filter: var(--am-backdrop-soft);
+    -webkit-backdrop-filter: var(--am-backdrop-soft);
+}
+
+.am-spotlight-info:hover {
+    background: rgb(var(--am-accent-rgb) / 0.22);
+    box-shadow: inset 0 0 0 1px rgb(var(--am-accent-rgb) / 0.5);
+}
+
+/* Pijlen + stippen rechtsonder */
+.am-spotlight-controls {
+    position: absolute;
+    z-index: 2;
+    right: clamp(18px, 3vw, 40px);
+    bottom: clamp(26px, 6vh, 60px);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.am-spotlight-arrow {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    padding: 0;
+    border: 1px solid var(--am-border-hi);
+    border-radius: 50%;
+    background: var(--am-glass);
+    color: var(--am-text);
+    cursor: pointer;
+    backdrop-filter: var(--am-backdrop-soft);
+    -webkit-backdrop-filter: var(--am-backdrop-soft);
+    transition: background var(--am-fast), border-color var(--am-fast);
+}
+
+.am-spotlight-arrow:hover {
+    background: rgb(var(--am-accent-rgb) / 0.25);
+    border-color: rgb(var(--am-accent-rgb) / 0.5);
+}
+
+.am-spotlight-dots {
+    display: flex;
+    gap: 6px;
+}
+
+.am-spotlight-dot {
+    width: 8px;
+    height: 8px;
+    padding: 0;
+    border: 0;
+    border-radius: 8px;
+    background: rgb(255 255 255 / 0.35);
+    cursor: pointer;
+    transition: width var(--am-slow), background var(--am-fast);
+}
+
+.am-spotlight-dot:hover {
+    background: rgb(255 255 255 / 0.6);
+}
+
+.am-spotlight-dot[aria-current="true"] {
+    width: 24px;
+    background: var(--am-gradient);
+}
+
+@media (max-width: 800px) {
+    .am-spotlight {
+        height: clamp(380px, 62vh, 480px);
+        margin: .2em 4% 1.2em;
+        border-radius: 20px;
+    }
+
+    .am-spotlight-slide::after {
+        background:
+            linear-gradient(0deg, rgb(8 5 15 / 0.96) 0%, rgb(8 5 15 / 0.7) 45%, rgb(8 5 15 / 0) 75%);
+    }
+
+    .am-spotlight-content {
+        left: 18px;
+        right: 18px;
+        bottom: 58px;
+        max-width: none;
+    }
+
+    .am-spotlight-logo {
+        max-height: 80px;
+    }
+
+    .am-spotlight-overview {
+        -webkit-line-clamp: 2;
+        font-size: .92em;
+    }
+
+    .am-spotlight-btn {
+        height: 42px;
+        font-size: .95rem;
+    }
+
+    .am-spotlight-controls {
+        left: 0;
+        right: 0;
+        bottom: 20px;
+        justify-content: center;
+    }
+
+    .am-spotlight-arrow {
+        display: none;
+    }
+}
+
+/* Geen zoom en geen fade bij minder beweging, lite en tv */
+@media (prefers-reduced-motion: reduce) {
+    .am-spotlight-slide,
+    .am-spotlight-bg {
+        transition: none;
+        transform: none;
+    }
+}
+.am-lite .am-spotlight-slide,
+.am-lite .am-spotlight-bg,
+.layout-tv .am-spotlight-slide,
+.layout-tv .am-spotlight-bg {
+    transition: none;
+    transform: none;
+}
+
+
+/* =============================================================================
+   21. KWALITEITSBADGES (js/badges.js)
+   ============================================================================= */
+
+.am-badges {
+    position: absolute;
+    z-index: 2;
+    top: 8px;
+    left: 8px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    max-width: calc(100% - 52px); /* rechtsboven staan Jellyfin's eigen indicatoren */
+    pointer-events: none;
+}
+
+.am-badge {
+    padding: 4px 6px 3px;
+    border-radius: 6px;
+    background: rgb(8 5 15 / 0.72);
+    border: 1px solid rgb(255 255 255 / 0.16);
+    color: #fff;
+    font: 800 .62rem/1 var(--am-font);
+    letter-spacing: .04em;
+    box-shadow: 0 2px 8px rgb(0 0 0 / 0.4);
+    backdrop-filter: var(--am-backdrop-soft);
+    -webkit-backdrop-filter: var(--am-backdrop-soft);
+}
+
+.am-badge-res {
+    background: var(--am-gradient);
+    border-color: rgb(255 255 255 / 0.25);
+}
+
+.am-badge-dv {
+    background: linear-gradient(135deg, #0b0b0f, #2a2a33);
+}
+
+.am-badge-hdr {
+    color: #fde68a;
+}
+
+.am-badge-audio {
+    color: #ddd6fe;
 }
